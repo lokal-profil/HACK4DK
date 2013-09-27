@@ -7,23 +7,50 @@
 <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
 <script src="js/resultobject.js"></script>
 
-<link rel="stylesheet" href="http://yui.yahooapis.com/combo?pure/0.3.0/pure-min.css&pure/0.3.0/base-min.css&pure/0.3.0/forms-min.css&pure/0.3.0/grids-min.css"/>
-<link rel="stylesheet" href="css/pure-skin-mine.css"/>
-<link rel="stylesheet" href="css/local.css"/>
-
-</head>
-<body>
-
-  <div class="pure-g-r" id="outer">
-    <div class="pure-u-3-5">
-      <div id="main"></div>
-    </div>
-    
-
 <script>
+var rObjs = new Array();
+
+function executeSearch(q) {
+rObjs = new Array();
+$.ajax({
+   type: 'GET',
+   error: function(data, textStatus) {
+      console.log('An error occurred while loading data (AJAX error ' + data + ' ' + textStatus + ')');
+   },
+   url: '/HACK4DK/web/mockup/js/stageobject.js?q=' + q,
+   dataType: 'json',
+   success: function(json) {
+      populateSearchResult(json);      
+   }
+});
+
+}
+
+
+function populateSearchResult(rObjs) {
+   $('#searchresults').html('');
+   $.each(rObjs, function(index, ro) {
+      var newCard = $(document.createElement('div'));
+      newCard.attr('class', 'resultcard');
+      if(ro.media.mediatype == 'image') {
+          newCard.append('<img src="' + ro.media.thumb + '"/>');
+      }
+      newCard.append('<b>' + ro.title + '</b><p>' + ro.artist + ' (' + ro.year + ')' );
+      $('#searchresults').append(newCard);
+
+   });
+
+
+}
+
+
+
+window.onload = function load() {
+
+// Load map from OSM
 
 var map = new OpenLayers.Map("main");
-map.addLayer(new OpenLayers.Layer.OSM("MapQuest Open", 
+map.addLayer(new OpenLayers.Layer.OSM("MapQuest Open",
              ["http://otile1.mqcdn.com/tiles/1.0.0/osm/${z}/${x}/${y}.png",
               "http://otile2.mqcdn.com/tiles/1.0.0/osm/${z}/${x}/${y}.png",
               "http://otile3.mqcdn.com/tiles/1.0.0/osm/${z}/${x}/${y}.png",
@@ -39,15 +66,31 @@ var centerLonLat = new OpenLayers.LonLat(12.56974, 55.68672)
 
 map.setCenter (centerLonLat, 13);
 
+$('#q').live('keydown',function(e){if(e.which===13){executeSearch(document.getElementById('q').value)}});
+console.log('Loaded.');
+
+}
+
 </script>
 
+<link rel="stylesheet" href="http://yui.yahooapis.com/combo?pure/0.3.0/pure-min.css&pure/0.3.0/base-min.css&pure/0.3.0/forms-min.css&pure/0.3.0/grids-min.css"/>
+<link rel="stylesheet" href="css/pure-skin-mine.css"/>
+<link rel="stylesheet" href="css/local.css"/>
 
+</head>
+<body>
+
+  <div class="pure-g-r" id="outer">
+    <div class="pure-u-3-5">
+      <div id="main"></div>
+    </div>
+    
     <div class="pure-u-2-5" id="sidebarholder">
       <div id="sidebar">	
-	<form class="pure-form">
+	<div class="pure-form">
 	  <fieldset>
 	    <legend>Public art search</legend>
-	    <input type="text" placeholder="Type your query"/><br/>
+	    <input type="text" id="q" placeholder="Type your query"/><br/>
 	    <label for="type_all">
 	      <input id="type_all" type="checkbox">&nbsp;All</input>
 	    </label>
@@ -61,7 +104,7 @@ map.setCenter (centerLonLat, 13);
 	      <input id="type_place" type="checkbox">&nbsp;Place</input>
 	    </label>
 	  </fieldset>
-	</form>
+	</div>
 
 	<div id="searchresults">
 

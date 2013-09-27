@@ -7,8 +7,8 @@
 	"material": "Pure Fluff",
 	"place": "Copenhagen",
 	"geodata": {
-	    "lat": "12.57431",
-	    "lon": "55.67443"
+	    "lat": "55.67443",
+	    "lon": "12.57451"
 	},
         "media": {
             "mediatype" : "image",
@@ -36,8 +36,8 @@
 	"material": "Pure Andre",
 	"place": "Copenhagen",
 	"geodata": {
-	    "lat": "12.57451",
-	    "lon": "55.67493"
+	    "lat": "55.67493",
+	    "lon": "12.57451"
 	},
         "media": {
             "mediatype" : "image",
