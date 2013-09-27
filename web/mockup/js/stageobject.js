@@ -8,12 +8,25 @@
 	"place": "Copenhagen",
 	"geodata": {
 	    "lat": "12.57431",
-	    "lng": "55.67443"
+	    "lon": "55.67443"
 	},
-	"photolink": "http://www.fluff.se/prof.jpg",
-	"photolic": "CC-BY-SA",
-	"text": "Detta är ett helt makalöst konstverk",
-	"textlic": "CC-BY-SA"
+        "media": {
+            "mediatype" : "image",
+            "thumb": "http://www.fluff.se/prof.jpg",
+            "medialink" : "http://www.fluff.se/prof2.jpg",
+ 	    "medialic": "CC-BY-SA",
+            "byline" : "By: Fluff / CC-BY-SA"
+        },
+        "text": {
+	    "fulltext": "Detta är ett helt makalöst konstverk",
+	    "textlic": "CC-BY-SA",
+	    "byline": "By: Fluff / CC-BY-SA"
+        },
+        "meta": {
+            "module": "stage",
+            "datalic": "PD",
+            "byline": "PD by xyz"
+	}
     },
     {
 	"id": 12346,
@@ -24,11 +37,24 @@
 	"place": "Copenhagen",
 	"geodata": {
 	    "lat": "12.57451",
-	    "lng": "55.67493"
+	    "lon": "55.67493"
 	},
-	"photolink": "http://www.fluff.se/prof.jpg",
-	"photolic": "CC-BY-SA",
-	"text": "Detta är ett helt makalöst konstverk",
-	"textlic": "CC-BY-SA"
+        "media": {
+            "mediatype" : "image",
+            "thumb": "http://www.fluff.se/prof.jpg",
+            "medialink" : "http://www.fluff.se/prof2.jpg",
+            "medialic": "CC-BY-SA",
+            "byline" : "By: Fluff / CC-BY-SA"
+        },
+        "text": {
+            "fulltext": "Detta är ett helt makalöst konstverk",
+            "textlic": "CC-BY-SA",
+            "byline" : "By: Fluff / CC-BY-SA"
+        },
+        "meta": {
+            "module": "stage",
+            "datalic": "PD",
+	    "byline": "PD by xyz"
+	}
     }
 ]
