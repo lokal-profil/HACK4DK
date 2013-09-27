@@ -1,0 +1,30 @@
+#sidebarholder {
+    background-color: #ff842b;
+    height: 100%;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    position: absolute;
+}
+
+#sidebar {
+    padding-left: 1em;
+    padding-right: 1em;
+    overflow: auto;
+}
+
+#main {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 40%;
+    bottom: 0;
+}
+
+.resultcard {
+    border-radius: 5px;
+    border: 1px solid black;
+    background-color: #ff9c1f;
+    padding: .7em;
+
+}
