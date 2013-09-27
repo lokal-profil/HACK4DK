@@ -96,28 +96,29 @@ class odok extends modul {
                 } else {
                     $media = array( "mediatype" => 'none');
                 }
-                $item = array("id" => $a['id'],
-                              "title" => $a['title'],
-                              "artist" => $a['artist'],//wikidata
-                              "year" => $a['year'],
-                              "material" => $a['material'],
-                              "place" => $a['address'] . ", " . $a['district'] . ", " . $a['district'],
-                              "geodata" => array(
-                                  "lat" => $a['lat'],
-                                  "lon" => $a['lon'],
-                              ),
-                              "media" => $media,
-                              "text" => array(
-                                  "fulltext" => $a['descr'],
-                                  "textlic" => NULL,
-                                  "byline" => NULL
-                              ),
-                              "meta" => array(
-                                  "module" => $this->short_name,
-                                  "datalic" => $this->data_license,
-                                  "byline"  => '<a href="' . $this->info_link . '">' . $this->long_name . '</a> /' . $this->data_license
-                              )
-                            );
+                $item = array(
+                    "id" => $a['id'],
+                    "title" => $a['title'],
+                    "artist" => $a['artist'],//wikidata
+                    "year" => $a['year'],
+                    "material" => $a['material'],
+                    "place" => $a['address'] . ', ' . $a['district'],
+                    "geodata" => array(
+                        "lat" => $a['lat'],
+                        "lon" => $a['lon'],
+                    ),
+                    "media" => $media,
+                    "text" => array(
+                        "fulltext" => $a['descr'],
+                        "textlic" => NULL,
+                        "byline" => NULL
+                    ),
+                    "meta" => array(
+                        "module" => $this->short_name,
+                        "datalic" => $this->data_license,
+                        "byline"  => '<a href="' . $this->info_link . '">' . $this->long_name . '</a> /' . $this->data_license
+                    )
+                );
                 array_push($arr, $item);
             }
             $this->items = $arr;
@@ -133,7 +134,7 @@ class odok extends modul {
                 $filename = ucfirst($filename);
                 $filename = str_replace(' ', '_', $filename);
                 $md5hash=md5($filename);
-                $url = "https://upload.wikimedia.org/wikipedia/commons/thumb/" . $md5hash[0] . "/" . $md5hash[0] . $md5hash[1] . "/" . $filename;
+                $url = 'https://upload.wikimedia.org/wikipedia/commons/thumb/' . $md5hash[0] . '/' . $md5hash[0] . $md5hash[1] . '/' . $filename;
                 return $url;
             }
         }
@@ -141,9 +142,9 @@ class odok extends modul {
 }
 
 /* -------------------------------------------------------------------------------- */
-class vores_kunst extends modul {
+class voreskunst extends modul {
     public function __construct($image_width) {
-        $this->short_name = 'vores_kunst'; 
+        $this->short_name = 'voreskunst'; 
         $this->long_name = 'Vores Kunst - Kulturstyrelsen';
         $this->info_link = 'http://vores.kunst.dk/';
         $this->service_url = 'http://kunstpaastedet.dk/wsd/search/';
@@ -188,13 +189,32 @@ class vores_kunst extends modul {
             break;
         } else {
             $arr = Array();
-            foreach ($json[$first_key] as $value){
-                $a = $value['hit'];
-                $image_license = NULL;
-                if ($a['image']){
-                    $image_license = 'See <a href="https://commons.wikimedia.org/wiki/File:' . $a['image'] .'">the image page on Wikimedia Commons</a>.';
-                }
-                $item = array(); //...
+            foreach ($json[$first_key] as $a){
+                $item = array(
+                    "id" => $a['object_id'],
+                    "title" => $a['title'],
+                    "artist" => array_key_exists('artist',$a) ? $a['artist'] : NULL,
+                    "year" => array_key_exists('date',$a) ? $a['date'] : NULL,
+                    "material" => NULL,
+                    "place" => $a['location address'] . ', ' . $a['location name'],
+                    "geodata" => array(
+                        "lat" => $a['latitude'],
+                        "lon" => $a['longitude'],
+                    ),
+                    "media" => array(
+                        "mediatype" => 'none' //As $a['primary_image'] points to a dispatcher
+                    ),
+                    "text" => array(
+                        "fulltext" => array_key_exists('primary_image',$a) ? 'You can <a href="' . $a['primary_image'] . '">download an image of this artwork.</a>' : NULL,
+                        "textlic" => NULL,
+                        "byline" => NULL
+                    ),
+                    "meta" => array(
+                        "module" => $this->short_name,
+                        "datalic" => $this->data_license,
+                        "byline"  => '<a href="' . $this->info_link . '">' . $this->long_name . '</a> /' . $this->data_license
+                    )
+                );
                 array_push($arr, $item);
             }
             $this->items = $arr;
