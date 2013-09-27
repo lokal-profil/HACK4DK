@@ -21,8 +21,8 @@ abstract class modul {
      * Valid type parameters:
      * artist
      * title
+     * place (words)
      ** material        - add in phase 2
-     ** place (words)   - add in phase 2
      * #Place-coordinates - removed since not all api's support this. Potentially selecting this would shade out incompatible api's
      * #Modules to include/exclude - not sent down to module elvel
      */
@@ -32,18 +32,7 @@ abstract class modul {
      */
     abstract public function process_reply($reply);
     /**
-     * Returns an array of items where each item has following properties:
-     * ID (+Module)
-     * Title
-     * Artist
-     * Year (of purchase, construction or something)
-     * Material
-     * Place_wordy
-     * Place_coord
-     * Image_link
-     * Image_license
-     * License -of data
-     * Free_text
+     * parameters formated per https://github.com/lokal-profil/HACK4DK/blob/master/web/mockup/js/stageobject.js
      */
 }
 
@@ -55,7 +44,7 @@ class odok extends modul {
         $this->long_name = 'ODOK - Public art in Sweden';
         $this->info_link = 'http://offentligkonst.se';
         $this->service_url = 'http://wlpa.wikimedia.se/odok-bot/api.php';
-        $this->data_license = 'unknown';
+        $this->data_license = NULL;
         $this->image_width = $image_width;
     }
     
@@ -68,6 +57,9 @@ class odok extends modul {
                 break;
             case 'title':
                 $queryUrl .= '&title=' . urlencode($value);
+                break;
+            case 'place':
+                $queryUrl .= '&address=' . urlencode($value); //Should return a warnign that it doesn't search on district/city/municipality/county
                 break;
             default:
                 $queryUrl = False;
@@ -93,45 +85,59 @@ class odok extends modul {
             $arr = Array();
             foreach ($json['body'] as $key => $value){
                 $a = $value['hit'];
-                $image_license = NULL;
                 if ($a['image']){
-                    $image_license = 'See <a href="https://commons.wikimedia.org/wiki/File:' . $a['image'] .'">the image page on Wikimedia Commons</a>.';
+                    $media = array(
+                        "mediatype" => 'image',
+                        "thumb" => 'https://commons.wikimedia.org/w/thumb.php?f=' . $a['image'] . '&width=' . $this->image_width,
+                        "medialink" => self::getImageFromCommons($a['image']),
+                        "medialic" => NULL,
+                        "byline" => 'See <a href="https://commons.wikimedia.org/wiki/File:' . $a['image'] .'">the image page on Wikimedia Commons</a>.'
+                    );
+                } else {
+                    $media = array( "mediatype" => 'none');
                 }
                 $item = array("id" => $a['id'],
                               "title" => $a['title'],
                               "artist" => $a['artist'],//wikidata
                               "year" => $a['year'],
                               "material" => $a['material'],
-                              "lat" => $a['lat'],
-                              "lon" => $a['lon'],
                               "place" => $a['address'] . ", " . $a['district'] . ", " . $a['district'],
-                              "image" => 'https://commons.wikimedia.org/w/thumb.php?f=' . $a['image'] . '&width=' . $this->image_width,
-                              "image_license" => $image_license,
-                              "free text" => $a['descr'],
-                              "data_license" => $this->data_license,
-                              "module" => $this->short_name
+                              "geodata" => array(
+                                  "lat" => $a['lat'],
+                                  "lon" => $a['lon'],
+                              ),
+                              "media" => $media,
+                              "text" => array(
+                                  "fulltext" => $a['descr'],
+                                  "textlic" => NULL,
+                                  "byline" => NULL
+                              ),
+                              "meta" => array(
+                                  "module" => $this->short_name,
+                                  "datalic" => $this->data_license,
+                                  "byline"  => '<a href="' . $this->info_link . '">' . $this->long_name . '</a> /' . $this->data_license
+                              )
                             );
                 array_push($arr, $item);
             }
             $this->items = $arr;
         }
         return; //Null
-    
+        
+        /* 
+         * Given the filename on Commons this returns the url of the full image
+         * From: https://fisheye.toolserver.org/browse/erfgoed/api/includes/CommonFunctions.php
+         */
+        function getImageFromCommons($filename) {
+            if ($filename) {
+                $filename = ucfirst($filename);
+                $filename = str_replace(' ', '_', $filename);
+                $md5hash=md5($filename);
+                $url = "https://upload.wikimedia.org/wikipedia/commons/thumb/" . $md5hash[0] . "/" . $md5hash[0] . $md5hash[1] . "/" . $filename;
+                return $url;
+            }
+        }
     }
-    /**
-     * Parse reply. Deal with problems. Return answer as list of items
-     * ID (+Module)
-     * Title
-     * Artist
-     * Year (of purchase, construction or something)
-     * Material
-     * Place_wordy
-     * Place_coord (lat, lon)
-     * Image_link
-     * Image_license
-     * License -of data
-     * Free_text
-     */
 }
 
 /* -------------------------------------------------------------------------------- */
@@ -141,23 +147,59 @@ class vores_kunst extends modul {
         $this->long_name = 'Vores Kunst - Kulturstyrelsen';
         $this->info_link = 'http://vores.kunst.dk/';
         $this->service_url = 'http://kunstpaastedet.dk/wsd/search/';
-        $this->data_license = 'unknown';
+        $this->data_license = NULL;
         $this->image_width = $image_width;
     }
     
     /** Construct and return the query */
     public function make_query($type, $value) {
-        /**
-         * a. http://kunstpaastedet.dk/wsd/search/keyword/<SOME SEARCH STRING>
-         *      EXAMPLE:  http://kunstpaastedet.dk/wsd/search/keyword/jan
-         * b. http://kunstpaastedet.dk/wsd/search/artist/<SOME SEARCH STRING>
-         *      EXAMPLE:  http://kunstpaastedet.dk/wsd/search/artist/Erik A. Frandsen
-         * c. http://kunstpaastedet.dk/wsd/search/zipcode/<SOME SEARCH STRING>
-         *      EXAMPLE:  http://kunstpaastedet.dk/wsd/search/zipcode/8900
-         */
-     }
+        $queryUrl .= $this->service_url;
+        switch ($type) {
+            case 'artist':
+                $queryUrl .= 'artist/' . urlencode($value);
+                break;
+            case 'title':
+                $queryUrl .= 'keyword/' . urlencode($value); //Should return a warning clarifying it's a free text search. Reduce relevance
+                break;
+            case 'place':
+                //test if zipcode
+                if (strlen($value)==4 and is_numeric($value)){
+                    $queryUrl .= 'zipcode/' . urlencode($value);
+                } else {
+                    $queryUrl .= 'keyword/' . urlencode($value); //Should return a warning clarifying it's a free text search. Reduce relevance
+                }
+                break;
+            default:
+                $queryUrl = False;
+                break;  
+        }
+    }
     
     /** Process the returned reply and fill internal parameters */
-    public function process_reply($reply) {}
+    public function process_reply($reply) {
+        $json = json_decode($reply, true);
+        
+        reset($json);
+        $first_key = key($json);
+        
+        if (!is_array($json[$first_key])) {
+            $this->items = Array();
+            return $json[$first_key];
+            break;
+        } else {
+            $arr = Array();
+            foreach ($json[$first_key] as $value){
+                $a = $value['hit'];
+                $image_license = NULL;
+                if ($a['image']){
+                    $image_license = 'See <a href="https://commons.wikimedia.org/wiki/File:' . $a['image'] .'">the image page on Wikimedia Commons</a>.';
+                }
+                $item = array(); //...
+                array_push($arr, $item);
+            }
+            $this->items = $arr;
+        }
+        return; //Null
+    }
 
 }
