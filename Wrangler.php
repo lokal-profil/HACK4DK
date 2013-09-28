@@ -47,13 +47,7 @@ class wrangler {
             if (in_array($moduleName, $includedModules)){
                 $mod = new $moduleName(self::$thumb_width);
                 $queryUrl = $mod->make_query($type, $value);
-                //TMP
-                echo $moduleName . ' : ' .$queryUrl . '<br>';
-                //END TMP
                 $response = self::make_httpRequest($queryUrl);
-                //tmp
-                echo 'hello from post httpRequest:' . substr($response, 0, 100) . '...<br>';
-                //end tmp
                 $problems = $mod->process_response($response);
                 if (!$problems){
                     array_push($results, $mod->items);
@@ -74,7 +68,7 @@ class wrangler {
     //quick httpRequest - extend
     private function make_httpRequest($queryUrl){
         if (($file = file_get_contents($queryUrl)) === FALSE) {
-            echo("error");
+            echo('error in make_httpRequest for ' . $queryUrl);
             $file=NULL;
         }
         return $file;
