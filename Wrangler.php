@@ -13,7 +13,8 @@ class wrangler {
         'odok',
         'voreskunst',
     );
-    public static $thumb_width=100; //thumb_width
+    public static $thumb_width=100;     //thumb_width in px
+    public static $toManyResults=500;   //how many results are to many?
     
     // a list of the available modules including a longer linked name
     public function get_availableModules(){
@@ -42,21 +43,43 @@ class wrangler {
     //given type, value and modules to be included this collects all responses
     public function make_queries($type, $value, $includedModules){
         $includedModules = is_null($includedModules) ? self::$availableModules : $includedModules;
+        $info=Null; $warning=Null; $error=Null;
         $results = array();
         foreach (self::$availableModules as $moduleName){
             if (in_array($moduleName, $includedModules)){
                 $mod = new $moduleName(self::$thumb_width);
                 $queryUrl = $mod->make_query($type, $value);
                 $response = self::make_httpRequest($queryUrl);
+                if(empty($response)){
+                    $e = 'Error in make_httpRequest for ' . $queryUrl;
+                    $error = empty($error) ? $e : $error.'<br/>'.$e;
+                }
                 $problems = $mod->process_response($response);
                 if (!$problems){
                     $results = array_merge($mod->items,$results);
                 } else {
-                    echo '<!-' . $problems . '->';
+                    $p = $moduleName .' : ' .$problems;
+                    $info = empty($info) ? $p : $info.'<br/>'.$p;
                 }
             }
         }
-        self::respond($results);
+        if (count($results)>self::$toManyResults){
+            $w = 'The search returned A LOT of results, you probably want to limit it somhow';
+            $warning = empty($warning) ? $w : $warning.'<br/>'.$w;
+        }
+        $payload = array(
+            "header" => array(
+                "hits" => count($results),
+                "st" => $type,
+                "q" => $value,
+                "m" => $includedModules,
+                "info" => $info,
+                "warning" => $warning,
+                "error" => $error
+            ),
+            "body" =>$results
+        );
+        self::respond($payload);
     }
     
     //turns reply into json for the js
@@ -68,7 +91,6 @@ class wrangler {
     //quick httpRequest - extend
     private function make_httpRequest($queryUrl){
         if (($file = file_get_contents($queryUrl)) === FALSE) {
-            echo('error in make_httpRequest for ' . $queryUrl);
             $file=NULL;
         }
         return $file;
