@@ -68,10 +68,41 @@ function populateSearchResult(rObjs) {
 	if(ro.media && ro.media.mediatype == 'image') {
             newCard.append('<img src="' + ro.media.thumb + '"/>');
 	}
-	newCard.append('<b>' + ro.title + '</b><p>' + ro.artist + ' (' + ro.year + ')' );
+
+	var content = '';
+
+	if(ro.title) {
+	    content += '<b>' + ro.title + '</b>';
+	}
+	else {
+	    content += '<b>No title in database</b>';
+	}
+	if(ro.artist) {
+	    content += '<p>' + ro.artist;
+	}
+	if(ro.year) {
+	    content += ' (' + ro.year + ')';
+	}
+
+	newCard.append(content);
+
+	console.log(newCard);
 	$('#searchresults').append(newCard);
 	
-	$('#rc_' + index).balloon({position: 'left', classname: 'rcballoon', css: { minWidth: '400px' }, contents: newCard.html() + '<p>' + ro.text.fulltext + '</p>' }); 
+	var bc = $(document.createElement('div'));
+	bc.append(newCard.html());
+	if(ro.text.fulltext) {
+	    bc.append('<p>' + ro.text.fulltext + '</p>');
+	}
+
+
+
+	$('#rc_' + index).balloon(
+	    {
+		position: 'left', 
+		classname: 'rcballoon', 
+		css: { minWidth: '400px' }, 
+		contents: bc }); 
     });
 
     // Adjust map zoom
@@ -151,7 +182,6 @@ window.onload = function load() {
 	},
 	success: function(json) {
 	    $.each(json, function(index, module) {
-		console.log(module);
 		var newLi = $(document.createElement('li'));
 		var newInput = $(document.createElement('input'));
 		var newLabel = $(document.createElement('label'));
@@ -167,8 +197,6 @@ window.onload = function load() {
 		newLi.append(newLabel);
 
 		$('#modulelist').append(newLi);
-
-
 	    });
 	}
     });
@@ -214,6 +242,7 @@ window.onload = function load() {
 	</div>
 
 	<div id="searchresults">
+
 	</div>
       </div>
     </div>
