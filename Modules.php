@@ -45,7 +45,7 @@ class odok extends modul {
     public static $long_name = 'ODOK - Public art in Sweden';
     public static $info_link = 'http://offentligkonst.se';
     protected static $service_url = 'http://wlpa.wikimedia.se/odok-bot/api.php';
-    public static $data_license = NULL;
+    public static $data_license = 'ODbL';
     public static $supported_types = array('artist', 'title', 'place');
     
     public function __construct($thumb_width) {//these should not be instance properties
@@ -114,8 +114,8 @@ class odok extends modul {
                     "media" => $media,
                     "text" => array(
                         "fulltext" => empty($a['descr']) ? NULL : $a['descr'],
-                        "textlic" => NULL,
-                        "byline" => NULL
+                        "textlic" => 'CC BY-SA 3.0', //as info is from Wikipedia
+                        "byline" => 'Description from <a href="https://sv.wikipedia.org/">Wikipedia</a> / <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.en">CC BY-SA 3.0</a>.'
                     ),
                     "meta" => array(
                         "module" => self::$short_name,
@@ -154,7 +154,7 @@ class voreskunst extends modul {
     public static $long_name = 'Vores Kunst - Kulturstyrelsen';
     public static $info_link = 'http://vores.kunst.dk/';
     protected static $service_url = 'http://kunstpaastedet.dk/wsd/search/';
-    public static $data_license = NULL;
+    public static $data_license = 'CC-0'; //http://www.kulturstyrelsen.dk/kulturarv/databaser/rettigheder-til-data/
     public static $supported_types = array('artist', 'title', 'place');
     
     public function __construct($thumb_width) {
@@ -213,6 +213,7 @@ class voreskunst extends modul {
                     ),
                     "media" => array(
                         "mediatype" => 'none' //As $a['primary_image'] points to a dispatcher
+                        //"medialic" => 'CC BY-NC-ND 2.5 DK'
                     ),
                     "text" => array(
                         "fulltext" => empty($a['primary_image']) ? NULL : 'You can <a href="' . $a['primary_image'] . '">download an image of this artwork</a>.',
