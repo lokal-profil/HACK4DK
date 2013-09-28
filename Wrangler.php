@@ -90,9 +90,20 @@ class wrangler {
         echo $json;
     }
     
-    //quick httpRequest - extend
+    //http request with temporary user agent
     private function make_httpRequest($queryUrl){
-        if (($file = file_get_contents($queryUrl)) === FALSE) {
+        // Create a stream
+        $opts = array(
+          'http'=>array(
+            'method'=>"GET",
+            'user_agent'=>"hack4dk/1.0 (github.com/lokal-profil/HACK4DK)"
+          )
+        );
+        
+        $context = stream_context_create($opts);
+        
+        // Open the file using the HTTP headers set above
+        if (($file = file_get_contents($queryUrl, false, $context)) === FALSE) {
             $file=NULL;
         }
         return $file;
