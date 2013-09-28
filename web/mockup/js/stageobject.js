@@ -1,12 +1,12 @@
 [
     {"header":{
+        "hits": 2,
         "st":"artist",
         "q":"Carl",
         "m":[
             "stage",
             "odok"
         ],
-        "hits": 2,
         "info":"No objects found for odok.",
         "warning":"More than 500 hits",
         "error":Null,
@@ -14,7 +14,7 @@
     {"body":
         [
             {
-                "id": 12345,
+                "id": "12345",
                 "title": "Fluffs fantastiska konstverk",
                 "artist": "Fluff",
                 "year": "2013",
@@ -43,7 +43,7 @@
                 }
             },
             {
-                "id": 12346,
+                "id": "12346",
                 "title": "Andrés fantastiska konstverk",
                 "artist": "André",
                 "year": "2013",
