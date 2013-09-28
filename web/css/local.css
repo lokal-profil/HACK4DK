@@ -23,7 +23,7 @@
 
 /* lowering attribution line */
 #OpenLayers_Control_Attribution_7 {
-    bottom: 2em;
+    bottom: 1.5em;
     position: fixed;
 }
 
@@ -33,7 +33,8 @@
     background-color: #ff9c1f;
     padding: .7em;
     margin-bottom: .5em;
-
+    font-size: .7em;
+    overflow: auto;
 }
 
 .rcimg {
