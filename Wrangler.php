@@ -86,6 +86,7 @@ class wrangler {
     //turns reply into json for the js
     private function respond($payload){
         $json = json_encode($payload);
+        header('Content-type: text/plain');
         echo $json;
     }
     
