@@ -28,7 +28,7 @@
                     "mediatype" : "image",
                     "thumb": "http://www.fluff.se/prof.jpg",
                     "medialink" : "http://www.fluff.se/prof2.jpg",
-                "medialic": "CC-BY-SA",
+                    "medialic": "CC-BY-SA",
                     "byline" : "By: Fluff / CC-BY-SA"
                 },
                 "text": {
