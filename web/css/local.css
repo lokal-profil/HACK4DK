@@ -15,6 +15,10 @@
     left: 61%
 }
 
+#searchresults {
+    padding-top: 8em;
+}
+
 #sidebar {
     padding-left: 1em;
     padding-right: 1em;
