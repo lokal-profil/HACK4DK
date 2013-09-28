@@ -50,7 +50,7 @@ class wrangler {
                 $response = self::make_httpRequest($queryUrl);
                 $problems = $mod->process_response($response);
                 if (!$problems){
-                    array_push($results, $mod->items);
+                    $results = array_merge($mod->items,$results);
                 } else {
                     echo $problems;
                 }
