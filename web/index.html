@@ -69,7 +69,7 @@ function populateSearchResult(rObjs) {
 	if(ro.media && ro.media.mediatype == 'image') {
         imgSrc = '<img src="' + ro.media.thumb + '"/>';
         if(ro.media.medialink) {
-            newCard.append('<a href="' + ro.media.medialink + '"/>' + imgSrc + '</a>');
+            newCard.append('<a href="' + ro.media.medialink + '" target="_blank">' + imgSrc + '</a>');
         }
         else {
             newCard.append(imgSrc);
