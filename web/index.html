@@ -112,6 +112,10 @@ function populateSearchResult(rObjs) {
             bc.append('<small>' + ro.text.byline + '</small>');
         }
 	}
+    
+    if(ro.media && ro.media.mediatype == 'image') {
+        bc.append('<p><small></small>Source for image: ' + ro.media.byline + '</small></p>');
+    }
 
 
 
