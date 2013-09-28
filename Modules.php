@@ -106,7 +106,7 @@ class odok extends modul {
                     "artist" => empty($a['artist']) ? NULL : $a['artist'], //wikidata?
                     "year" => empty($a['year']) ? NULL : $a['year'],
                     "material" => empty($a['material']) ? NULL : $a['material'],
-                    "place" => $a['address'] . empty($a['district']) ? '' : ', ' . $a['district'],
+                    "place" => $a['address'] . ', ' . $a['district'], //should be made more roubust
                     "geodata" => array(
                         "lat" => $a['lat'],
                         "lon" => $a['lon'],
