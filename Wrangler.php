@@ -52,7 +52,7 @@ class wrangler {
                 if (!$problems){
                     $results = array_merge($mod->items,$results);
                 } else {
-                    echo $problems;
+                    echo '<!-' . $problems . '->';
                 }
             }
         }
