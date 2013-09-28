@@ -30,8 +30,9 @@
 
 }
 
-.resultcard img {
+.rcimg {
     padding-right: .5em;
     width: 15%;
+    max-height: 95%;
     float: left;
 }

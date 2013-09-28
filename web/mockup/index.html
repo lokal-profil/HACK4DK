@@ -3,9 +3,9 @@
 <head>
 <title>Public art search</title>
 
-<script src="js/jquery-1.3.2.min.js"></script>
+<script src="js/jquery-1.10.2.min.js"></script>
 <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
-<script src="js/resultobject.js"></script>
+<script src="js/jquery.balloon.js"></script>
 
 <script>
 var rObjs = new Array();
@@ -30,25 +30,35 @@ $.ajax({
 
 
 function populateSearchResult(rObjs) {
+
+// reset markers, bounds and searchresult
    $('#searchresults').html('');
    markers.destroy();
    markers = new OpenLayers.Layer.Markers("Markers");
+
    map.addLayer(markers);
    $.each(rObjs, function(index, ro) {
       var newCard = $(document.createElement('div'));
       newCard.attr('class', 'resultcard');
-      $(newCard).mouseenter(function() {
-         zoomToMarker(ro.geodata.lon, ro.geodata.lat, 13);
-      });
+      newCard.attr('id', 'rc_' + index);
+
+      if(ro.geodata) {
+         $(newCard).mouseenter(function() {
+            zoomToMarker(ro.geodata.lon, ro.geodata.lat, 13);
+         });
+         addMarker(ro.geodata.lon, ro.geodata.lat);
+
+      }
+
       if(ro.media.mediatype == 'image') {
           newCard.append('<img src="' + ro.media.thumb + '"/>');
       }
       newCard.append('<b>' + ro.title + '</b><p>' + ro.artist + ' (' + ro.year + ')' );
       $('#searchresults').append(newCard);
-    addMarker(ro.geodata.lon, ro.geodata.lat);
 
+      $('#rc_' + index).balloon({position: 'left', contents: newCard.html() + '<p>' + ro.text.fulltext + '</p>' }); 
    });
-
+   map.zoomToExtent(markers.getDataExtent());
 
 }
 
@@ -58,7 +68,8 @@ function addMarker(lon, lat) {
     ll.transform(new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
                  map.getProjectionObject() // to Spherical Mercator Projection
     );
-    markers.addMarker(new OpenLayers.Marker(ll));
+    var llmark = new OpenLayers.Marker(ll);
+    markers.addMarker(llmark);
 }
 
 function zoomToMarker(lon, lat, zoomLevel) {
@@ -95,7 +106,7 @@ markers = new OpenLayers.Layer.Markers("Markers");
 map.addLayer(markers);
 
 
-$('#q').live('keydown',function(e){if(e.which===13){executeSearch(document.getElementById('q').value)}});
+$('#q').on('keydown',function(e){if(e.which===13){executeSearch(document.getElementById('q').value)}});
 console.log('Loaded.');
 
 }
@@ -136,10 +147,6 @@ console.log('Loaded.');
 	</div>
 
 	<div id="searchresults">
-
-	  <div class="resultcard"><small>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus neque lacus, rhoncus at mauris luctus, imperdiet facilisis lorem. Sed eu libero lobortis, suscipit lacus interdum, ullamcorper nibh. Vestibulum ultricies quis ligula ut porta. Vestibulum blandit ante sed lacus luctus, sed posuere diam accumsan. Nunc non nibh massa. Sed porta urna arcu, nec scelerisque tortor mattis quis. Vivamus ultrices et justo non scelerisque.</small></div>
-
-
 	</div>
       </div>
     </div>
