@@ -1,6 +1,7 @@
 <!DOCTYPE html> 
 <html>
 <head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <title>Public art search</title>
 
 <script src="js/jquery-1.10.2.min.js"></script>
@@ -66,7 +67,13 @@ function populateSearchResult(rObjs) {
 	}
 	
 	if(ro.media && ro.media.mediatype == 'image') {
-            newCard.append('<img src="' + ro.media.thumb + '"/>');
+        imgSrc = '<img src="' + ro.media.thumb + '"/>';
+        if(ro.media.medialink) {
+            newCard.append('<a href="' + ro.media.medialink + '"/>' + imgSrc + '</a>');
+        }
+        else {
+            newCard.append(imgSrc);
+        }
 	}
 
 	var content = '';
@@ -91,8 +98,19 @@ function populateSearchResult(rObjs) {
 	
 	var bc = $(document.createElement('div'));
 	bc.append(newCard.html());
+    
+    if(ro.material) {
+        bc.append('<p>' + ro.material);
+    }
+    if(ro.place) {
+        bc.append('<p>' + ro.place);
+    }
+    
 	if(ro.text.fulltext) {
 	    bc.append('<p>' + ro.text.fulltext + '</p>');
+        if(ro.text.byline) {
+            bc.append('<small>' + ro.text.byline + '</small>');
+        }
 	}
 
 
