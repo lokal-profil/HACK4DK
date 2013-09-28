@@ -25,7 +25,7 @@ function executeSearch(q, st, m) {
 	error: function(data, textStatus) {
 	    console.log('An error occurred while loading data (AJAX error ' + data + ' ' + textStatus + ')');
 	},
-	url: '/HACK4DK/listener.php',
+	url: '../listener.php',
 	data: {
 	    action: 'query',
 	    q: q,
@@ -197,7 +197,7 @@ window.onload = function load() {
 	error: function(data, textStatus) {
 	    console.log('An error occurred while loading data (AJAX error ' + data + ' ' + textStatus + ')');
 	},
-	url: '/HACK4DK/listener.php',
+	url: '../listener.php',
 	dataType: 'json',
 	data: {
 	    action: 'allModules'
