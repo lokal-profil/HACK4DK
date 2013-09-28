@@ -113,7 +113,7 @@ class odok extends modul {
                     ),
                     "media" => $media,
                     "text" => array(
-                        "fulltext" => $a['descr'],
+                        "fulltext" => !$a['descr']=='' ? $a['descr'] : NULL,
                         "textlic" => NULL,
                         "byline" => NULL
                     ),
@@ -215,7 +215,7 @@ class voreskunst extends modul {
                         "mediatype" => 'none' //As $a['primary_image'] points to a dispatcher
                     ),
                     "text" => array(
-                        "fulltext" => array_key_exists('primary_image',$a) ? 'You can <a href="' . $a['primary_image'] . '">download an image of this artwork.</a>' : NULL,
+                        "fulltext" => array_key_exists('primary_image',$a) ? 'You can <a href="' . $a['primary_image'] . '">download an image of this artwork</a>.' : NULL,
                         "textlic" => NULL,
                         "byline" => NULL
                     ),
