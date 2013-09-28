@@ -90,6 +90,7 @@ class odok extends modul {
             $arr = Array();
             foreach ($json['body'] as $key => $value){
                 $a = $value['hit'];
+                //Make media separately
                 if (empty($a['image'])){
                     $media = array( "mediatype" => 'none');
                 } else {
@@ -101,13 +102,24 @@ class odok extends modul {
                         "byline" => 'See <a href="https://commons.wikimedia.org/wiki/File:' . $a['image'] .'">the image page on Wikimedia Commons</a>.'
                     );
                 }
+                //Make place separately
+                $place = '';
+                if (!empty($a['address'])){
+                    $place .= $a['address'];
+                    if (!empty($a['district'])){
+                        $place .= ', ' . $a['district'];
+                    }
+                } elseif (!empty($a['district'])){
+                    $place .= $a['district'];
+                }
+                //Make main object
                 $item = array(
                     "id" => $a['id'],
                     "title" => empty($a['title']) ? NULL : $a['title'],
                     "artist" => empty($a['artist']) ? NULL : $a['artist'], //wikidata?
                     "year" => empty($a['year']) ? NULL : $a['year'],
                     "material" => empty($a['material']) ? NULL : $a['material'],
-                    "place" => $a['address'] . ', ' . $a['district'], //should be made more roubust
+                    "place" => empty($place) ? NULL : $place,
                     "geodata" => array(
                         "lat" => $a['lat'],
                         "lon" => $a['lon'],
@@ -201,13 +213,24 @@ class voreskunst extends modul {
         } else {
             $arr = Array();
             foreach ($json[$first_key] as $a){
+                //Make place separately
+                $place = '';
+                if (!empty($a['location address'])){
+                    $place .= $a['location address'];
+                    if (!empty($a['location name'])){
+                        $place .= ', ' . $a['location name'];
+                    }
+                } elseif (!empty($a['location name'])){
+                    $place .= $a['location name'];
+                }
+                //Make main object
                 $item = array(
                     "id" => $a['object_id'],
                     "title" => empty($a['title']) ? NULL : $a['title'],
                     "artist" => empty($a['artist']) ? NULL : $a['artist'],
                     "year" => empty($a['date']) ? NULL : $a['date'],
                     "material" => NULL,
-                    "place" => $a['location address'] . ', ' . $a['location name'],
+                    "place" => empty($place) ? NULL : $place,
                     "geodata" => array(
                         "lat" => $a['latitude'],
                         "lon" => $a['longitude'],
