@@ -2,14 +2,14 @@
 
 /* -------------------------------------------------------------------------------- */
 abstract class modul {
-    public $long_name;      //name of datasource
-    public $info_link;      //url to more information for datasource
-    public $data_license;   //license for the data (excluding images)
-    protected $short_name;  //The address for the api
-    protected $service_url; //The address for the api
+    public static $long_name;      //name of datasource
+    public static $info_link;      //url to more information for datasource
+    public static $data_license;   //license for the data (excluding images)
+    protected static $short_name;  //The address for the api
+    protected static $service_url; //The address for the api
     protected $thumb_width; //The address for the api
     public $items;          //array of replsponded items
-    public $supported_types;//array of types supported by make_query
+    public static $supported_types;//array of types supported by make_query
     
     /** Construct the class, giving thumb_width in px */
     abstract public function __construct($thumb_width);
@@ -41,19 +41,20 @@ abstract class modul {
  * Description of dataset
  */
 class odok extends modul {
+    protected static $short_name = 'odok'; 
+    public static $long_name = 'ODOK - Public art in Sweden';
+    public static $info_link = 'http://offentligkonst.se';
+    protected static $service_url = 'http://wlpa.wikimedia.se/odok-bot/api.php';
+    public static $data_license = NULL;
+    public static $supported_types = array('artist', 'title', 'place');
+    
     public function __construct($thumb_width) {//these should not be instance properties
-        $this->short_name = 'odok'; 
-        $this->long_name = 'ODOK - Public art in Sweden';
-        $this->info_link = 'http://offentligkonst.se';
-        $this->service_url = 'http://wlpa.wikimedia.se/odok-bot/api.php';
-        $this->data_license = NULL;
         $this->thumb_width = $thumb_width;
-        $this->supported_types = array('artist', 'title', 'place');
     }
     
     /** Construct and return the query */
     public function make_query($type, $value) {
-        $queryUrl .= $this->service_url . '?action=get&format=json&limit=100';
+        $queryUrl .= self::$service_url . '?action=get&format=json&limit=100';
         switch ($type) {
             case 'artist':
                 $queryUrl .= '&artist=' . urlencode($value);
@@ -117,9 +118,9 @@ class odok extends modul {
                         "byline" => NULL
                     ),
                     "meta" => array(
-                        "module" => $this->short_name,
-                        "datalic" => $this->data_license,
-                        "byline"  => '<a href="' . $this->info_link . '">' . $this->long_name . '</a> /' . $this->data_license
+                        "module" => self::$short_name,
+                        "datalic" => self::$data_license,
+                        "byline"  => '<a href="' . self::$info_link . '">' . self::$long_name . '</a> /' . self::$data_license
                     )
                 );
                 array_push($arr, $item);
@@ -127,19 +128,19 @@ class odok extends modul {
             $this->items = $arr;
         }
         return; //Null
+    }
         
-        /* 
-         * Given the filename on Commons this returns the url of the full image
-         * From: https://fisheye.toolserver.org/browse/erfgoed/api/includes/CommonFunctions.php
-         */
-        function getImageFromCommons($filename) {
-            if ($filename) {
-                $filename = ucfirst($filename);
-                $filename = str_replace(' ', '_', $filename);
-                $md5hash=md5($filename);
-                $url = 'https://upload.wikimedia.org/wikipedia/commons/thumb/' . $md5hash[0] . '/' . $md5hash[0] . $md5hash[1] . '/' . $filename;
-                return $url;
-            }
+    /* 
+     * Given the filename on Commons this returns the url of the full image
+     * From: https://fisheye.toolserver.org/browse/erfgoed/api/includes/CommonFunctions.php
+     */
+    private static function getImageFromCommons($filename) {
+        if ($filename) {
+            $filename = ucfirst($filename);
+            $filename = str_replace(' ', '_', $filename);
+            $md5hash=md5($filename);
+            $url = 'https://upload.wikimedia.org/wikipedia/commons/thumb/' . $md5hash[0] . '/' . $md5hash[0] . $md5hash[1] . '/' . $filename;
+            return $url;
         }
     }
 }
@@ -149,19 +150,20 @@ class odok extends modul {
  * Description of dataset
  */
 class voreskunst extends modul {
+    protected static $short_name = 'voreskunst'; 
+    public static $long_name = 'Vores Kunst - Kulturstyrelsen';
+    public static $info_link = 'http://vores.kunst.dk/';
+    protected static $service_url = 'http://kunstpaastedet.dk/wsd/search/';
+    public static $data_license = NULL;
+    public static $supported_types = array('artist', 'title', 'place');
+    
     public function __construct($thumb_width) {
-        $this->short_name = 'voreskunst'; 
-        $this->long_name = 'Vores Kunst - Kulturstyrelsen';
-        $this->info_link = 'http://vores.kunst.dk/';
-        $this->service_url = 'http://kunstpaastedet.dk/wsd/search/';
-        $this->data_license = NULL;
         $this->thumb_width = $thumb_width;
-        $this->supported_types = array('artist', 'title', 'place');
     }
     
     /** Construct and return the query */
     public function make_query($type, $value) {
-        $queryUrl .= $this->service_url;
+        $queryUrl .= self::$service_url;
         switch ($type) {
             case 'artist':
                 $queryUrl .= 'artist/' . urlencode($value);
@@ -181,6 +183,7 @@ class voreskunst extends modul {
                 $queryUrl = NULL;
                 break;  
         }
+        return $queryUrl;
     }
     
     /** Process the returned response and fill internal parameters */
@@ -217,9 +220,9 @@ class voreskunst extends modul {
                         "byline" => NULL
                     ),
                     "meta" => array(
-                        "module" => $this->short_name,
-                        "datalic" => $this->data_license,
-                        "byline"  => '<a href="' . $this->info_link . '">' . $this->long_name . '</a> /' . $this->data_license
+                        "module" => self::$short_name,
+                        "datalic" => self::$data_license,
+                        "byline"  => '<a href="' . self::$info_link . '">' . self::$long_name . '</a> /' . self::$data_license
                     )
                 );
                 array_push($arr, $item);
