@@ -1,0 +1,170 @@
+<!DOCTYPE html> 
+<html>
+<head>
+<title>Public art search</title>
+
+<script src="js/jquery-1.10.2.min.js"></script>
+<script src="http://www.openlayers.org/api/OpenLayers.js"></script>
+<script src="js/jquery.balloon.js"></script>
+
+<script>
+var rObjs = new Array();
+var map;
+var markers;
+
+function executeSearch(q, st, m) {
+    // q = query
+    // st = search type
+    // m = module
+    
+    rObjs = new Array();
+
+    $.ajax({
+	type: 'GET',
+	error: function(data, textStatus) {
+	    console.log('An error occurred while loading data (AJAX error ' + data + ' ' + textStatus + ')');
+	},
+	url: '/HACK4DK/listener.php?action=query&q=' + q + '&st=' + st,
+	dataType: 'json',
+	success: function(json) {
+	    populateSearchResult(json);      
+	}
+    });
+}
+
+
+function populateSearchResult(rObjs) {
+
+    // reset markers, bounds and searchresult
+    $('#searchresults').html('');
+    markers.destroy();
+    markers = new OpenLayers.Layer.Markers("Markers");
+    
+    map.addLayer(markers);
+
+    // iterate all result objects
+    $.each(rObjs, function(index, ro) {
+	var newCard = $(document.createElement('div'));
+	newCard.attr('class', 'resultcard');
+	newCard.attr('id', 'rc_' + index);
+	
+	if(ro.geodata) {
+            $(newCard).mouseenter(function() {
+		zoomToMarker(ro.geodata.lon, ro.geodata.lat, 13);
+            });
+            addMarker(ro.geodata.lon, ro.geodata.lat);
+	    
+	}
+	
+	if(ro.media.mediatype == 'image') {
+            newCard.append('<img src="' + ro.media.thumb + '" class="rcimg"/>');
+	}
+	newCard.append('<b>' + ro.title + '</b><p>' + ro.artist + ' (' + ro.year + ')' );
+	$('#searchresults').append(newCard);
+	
+	$('#rc_' + index).balloon({position: 'left', classname: 'rcballoon', contents: newCard.html() + '<p>' + ro.text.fulltext + '</p>' }); 
+    });
+
+    // Adjust map zoom
+    map.zoomToExtent(markers.getDataExtent());
+}
+
+function addMarker(lon, lat) {
+    console.log("Longitude: " + lon + " Latitude: " + lat);
+    var ll = new OpenLayers.LonLat(lon, lat);
+    ll.transform(new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
+                 map.getProjectionObject() // to Spherical Mercator Projection
+		);
+    var llmark = new OpenLayers.Marker(ll);
+    markers.addMarker(llmark);
+}
+
+function zoomToMarker(lon, lat, zoomLevel) {
+    var ll = new OpenLayers.LonLat(lon, lat);
+    ll.transform(new OpenLayers.Projection("EPSG:4326"), 
+                 map.getProjectionObject()
+		);
+    map.setCenter(ll, zoomLevel);
+}
+
+
+window.onload = function load() {
+
+    // Load map from OSM
+
+    map = new OpenLayers.Map("main");
+    map.addLayer(new OpenLayers.Layer.OSM("MapQuest Open",
+					  ["http://otile1.mqcdn.com/tiles/1.0.0/osm/${z}/${x}/${y}.png",
+					   "http://otile2.mqcdn.com/tiles/1.0.0/osm/${z}/${x}/${y}.png",
+					   "http://otile3.mqcdn.com/tiles/1.0.0/osm/${z}/${x}/${y}.png",
+					   "http://otile4.mqcdn.com/tiles/1.0.0/osm/${z}/${x}/${y}.png"],
+					  {attribution: "&copy; <a href='http://www.openstreetmap.org/'>OpenStreetMap</a> and contributors, under an <a href='http://www.openstreetmap.org/copyright' title='ODbL'>open license</a>. Tiles Courtesy of <a href='http://www.mapquest.com/'>MapQuest</a> <img src='http://developer.mapquest.com/content/osm/mq_logo.png'>" })		 
+		);
+
+    var centerLonLat = new OpenLayers.LonLat(12.56974, 55.68672)
+	.transform(
+	    new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
+	    map.getProjectionObject() // to Spherical Mercator Projection
+	);
+
+    map.setCenter (centerLonLat, 13);
+    markers = new OpenLayers.Layer.Markers("Markers");
+    map.addLayer(markers);
+
+
+    $('#q').on('keydown',function(e){
+	if(e.which===13){
+	    var st = $('[name=st]:checked').val();
+	    if(!st || !document.getElementById('q').value) {
+		alert("No search query or search type defined.");
+	    }
+	    else {
+		executeSearch(document.getElementById('q').value, st, '');
+	    }
+	}
+    });
+    console.log('Loaded.');
+
+}
+
+</script>
+
+<link rel="stylesheet" href="http://yui.yahooapis.com/combo?pure/0.3.0/pure-min.css&pure/0.3.0/base-min.css&pure/0.3.0/forms-min.css&pure/0.3.0/grids-min.css"/>
+<link rel="stylesheet" href="css/pure-skin-mine.css"/>
+<link rel="stylesheet" href="css/local.css"/>
+
+</head>
+<body>
+
+  <div class="pure-g-r" id="outer">
+    <div class="pure-u-3-5">
+      <div id="main"></div>
+    </div>
+    
+    <div class="pure-u-2-5" id="sidebarholder">
+      <div id="sidebar">	
+	<div class="pure-form">
+	  <fieldset>
+	    <legend>Public art search</legend>
+	    <label for="type_artist">
+	      <input id="type_artist" type="radio" value="artist" name="st">&nbsp;Artist</input>
+	    </label>
+	    <label for="type_title">
+	      <input id="type_title" type="radio" value="title" name="st">&nbsp;Title</input>
+	    </label>
+	    <label for="type_place">
+	      <input id="type_place" type="radio" value="place" name="st">&nbsp;Place</input>
+	    </label>
+            <input type="text" id="q" placeholder="Type your query" style="width: 80%"/><br/>
+
+	  </fieldset>
+	</div>
+
+	<div id="searchresults">
+	</div>
+      </div>
+    </div>
+</div>
+
+</body>
+</html>
