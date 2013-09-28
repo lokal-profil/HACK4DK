@@ -56,13 +56,13 @@ function populateSearchResult(rObjs) {
 	    
 	}
 	
-	if(ro.media.mediatype == 'image') {
+	if(ro.media && ro.media.mediatype == 'image') {
             newCard.append('<img src="' + ro.media.thumb + '" class="rcimg"/>');
 	}
 	newCard.append('<b>' + ro.title + '</b><p>' + ro.artist + ' (' + ro.year + ')' );
 	$('#searchresults').append(newCard);
 	
-	$('#rc_' + index).balloon({position: 'left', classname: 'rcballoon', contents: newCard.html() + '<p>' + ro.text.fulltext + '</p>' }); 
+	$('#rc_' + index).balloon({position: 'left', classname: 'rcballoon', css: {maxWidth: '40%'}, contents: newCard.html() + '<p>' + ro.text.fulltext + '</p>' }); 
     });
 
     // Adjust map zoom

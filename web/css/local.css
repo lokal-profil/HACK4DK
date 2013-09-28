@@ -21,6 +21,12 @@
     bottom: 0;
 }
 
+/* lowering attribution line */
+#OpenLayers_Control_Attribution_7 {
+    bottom: 2em;
+    position: fixed;
+}
+
 .resultcard {
     border-radius: 5px;
     border: 1px solid black;
