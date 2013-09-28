@@ -8,7 +8,7 @@
 	"place": "Copenhagen",
 	"geodata": {
 	    "lat": "55.67443",
-	    "lon": "12.57451"
+	    "lon": "12.77451"
 	},
         "media": {
             "mediatype" : "image",

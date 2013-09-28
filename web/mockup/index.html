@@ -9,6 +9,8 @@
 
 <script>
 var rObjs = new Array();
+var map;
+var markers;
 
 function executeSearch(q) {
 rObjs = new Array();
@@ -29,27 +31,51 @@ $.ajax({
 
 function populateSearchResult(rObjs) {
    $('#searchresults').html('');
+   markers.destroy();
+   markers = new OpenLayers.Layer.Markers("Markers");
+   map.addLayer(markers);
    $.each(rObjs, function(index, ro) {
       var newCard = $(document.createElement('div'));
       newCard.attr('class', 'resultcard');
+      $(newCard).mouseenter(function() {
+         zoomToMarker(ro.geodata.lon, ro.geodata.lat, 13);
+      });
       if(ro.media.mediatype == 'image') {
           newCard.append('<img src="' + ro.media.thumb + '"/>');
       }
       newCard.append('<b>' + ro.title + '</b><p>' + ro.artist + ' (' + ro.year + ')' );
       $('#searchresults').append(newCard);
+    addMarker(ro.geodata.lon, ro.geodata.lat);
 
    });
 
 
 }
 
+function addMarker(lon, lat) {
+    console.log("Longitude: " + lon + " Latitude: " + lat);
+    var ll = new OpenLayers.LonLat(lon, lat);
+    ll.transform(new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
+                 map.getProjectionObject() // to Spherical Mercator Projection
+    );
+    markers.addMarker(new OpenLayers.Marker(ll));
+}
+
+function zoomToMarker(lon, lat, zoomLevel) {
+    var ll = new OpenLayers.LonLat(lon, lat);
+    ll.transform(new OpenLayers.Projection("EPSG:4326"), 
+                 map.getProjectionObject()
+    );
+   map.setCenter(ll, zoomLevel);
+
+}
 
 
 window.onload = function load() {
 
 // Load map from OSM
 
-var map = new OpenLayers.Map("main");
+map = new OpenLayers.Map("main");
 map.addLayer(new OpenLayers.Layer.OSM("MapQuest Open",
              ["http://otile1.mqcdn.com/tiles/1.0.0/osm/${z}/${x}/${y}.png",
               "http://otile2.mqcdn.com/tiles/1.0.0/osm/${z}/${x}/${y}.png",
@@ -65,6 +91,9 @@ var centerLonLat = new OpenLayers.LonLat(12.56974, 55.68672)
 );
 
 map.setCenter (centerLonLat, 13);
+markers = new OpenLayers.Layer.Markers("Markers");
+map.addLayer(markers);
+
 
 $('#q').live('keydown',function(e){if(e.which===13){executeSearch(document.getElementById('q').value)}});
 console.log('Loaded.');
