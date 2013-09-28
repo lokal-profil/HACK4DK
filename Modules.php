@@ -89,7 +89,9 @@ class odok extends modul {
             $arr = Array();
             foreach ($json['body'] as $key => $value){
                 $a = $value['hit'];
-                if ($a['image']){
+                if (empty($a['image'])){
+                    $media = array( "mediatype" => 'none');
+                } else {
                     $media = array(
                         "mediatype" => 'image',
                         "thumb" => 'https://commons.wikimedia.org/w/thumb.php?f=' . $a['image'] . '&width=' . $this->thumb_width,
@@ -97,23 +99,21 @@ class odok extends modul {
                         "medialic" => NULL,
                         "byline" => 'See <a href="https://commons.wikimedia.org/wiki/File:' . $a['image'] .'">the image page on Wikimedia Commons</a>.'
                     );
-                } else {
-                    $media = array( "mediatype" => 'none');
                 }
                 $item = array(
                     "id" => $a['id'],
-                    "title" => $a['title'],
-                    "artist" => $a['artist'],//wikidata
-                    "year" => $a['year'],
-                    "material" => $a['material'],
-                    "place" => $a['address'] . ', ' . $a['district'],
+                    "title" => empty($a['title']) ? NULL : $a['title'],
+                    "artist" => empty($a['artist']) ? NULL : $a['artist'], //wikidata?
+                    "year" => empty($a['year']) ? NULL : $a['year'],
+                    "material" => empty($a['material']) ? NULL : $a['material'],
+                    "place" => $a['address'] . empty($a['district']) ? '' : ', ' . $a['district'],
                     "geodata" => array(
                         "lat" => $a['lat'],
                         "lon" => $a['lon'],
                     ),
                     "media" => $media,
                     "text" => array(
-                        "fulltext" => !$a['descr']=='' ? $a['descr'] : NULL,
+                        "fulltext" => empty($a['descr']) ? NULL : $a['descr'],
                         "textlic" => NULL,
                         "byline" => NULL
                     ),
@@ -202,9 +202,9 @@ class voreskunst extends modul {
             foreach ($json[$first_key] as $a){
                 $item = array(
                     "id" => $a['object_id'],
-                    "title" => $a['title'],
-                    "artist" => array_key_exists('artist',$a) ? $a['artist'] : NULL,
-                    "year" => array_key_exists('date',$a) ? $a['date'] : NULL,
+                    "title" => empty($a['title']) ? NULL : $a['title'],
+                    "artist" => empty($a['artist']) ? NULL : $a['artist'],
+                    "year" => empty($a['date']) ? NULL : $a['date'],
                     "material" => NULL,
                     "place" => $a['location address'] . ', ' . $a['location name'],
                     "geodata" => array(
@@ -215,7 +215,7 @@ class voreskunst extends modul {
                         "mediatype" => 'none' //As $a['primary_image'] points to a dispatcher
                     ),
                     "text" => array(
-                        "fulltext" => array_key_exists('primary_image',$a) ? 'You can <a href="' . $a['primary_image'] . '">download an image of this artwork</a>.' : NULL,
+                        "fulltext" => empty($a['primary_image']) ? NULL : 'You can <a href="' . $a['primary_image'] . '">download an image of this artwork</a>.',
                         "textlic" => NULL,
                         "byline" => NULL
                     ),
