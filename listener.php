@@ -16,7 +16,7 @@ if(isset($_GET['action'])){
             wrangler::supports_type($_GET['st']);
             break;
         default:
-            echo 'invalid action';
+            echo 'invalid action: ' . $_GET['action'];
             break;
     }
 }
