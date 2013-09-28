@@ -22,7 +22,7 @@ class wrangler {
         foreach (self::$availableModules as $moduleName){
             $a = array(
                 'short_name'=>$moduleName,
-                'plain_name'=>$moduleName::$long_name,
+                'plain_name'=>$moduleName::$plain_name,
                 'linked_name'=>'<a href="' . $moduleName::$info_link .'">'. $moduleName::$long_name .'</a>',
             );
             array_push($available, $a);
@@ -97,6 +97,5 @@ class wrangler {
         }
         return $file;
     }
-
 }
 ?>

@@ -3,6 +3,7 @@
 /* -------------------------------------------------------------------------------- */
 abstract class modul {
     public static $long_name;      //name of datasource
+    public static $plain_name;     //short but descriptive
     public static $info_link;      //url to more information for datasource
     public static $data_license;   //license for the data (excluding images)
     protected static $short_name;  //The address for the api
@@ -42,7 +43,8 @@ abstract class modul {
  */
 class odok extends modul {
     protected static $short_name = 'odok'; 
-    public static $long_name = 'ODOK - Public art in Sweden';
+    public static $long_name = 'ÖDOK - Public art in Sweden';
+    public static $plain_name = 'ÖDOK';     //short but descriptive
     public static $info_link = 'http://offentligkonst.se';
     protected static $service_url = 'http://wlpa.wikimedia.se/odok-bot/api.php';
     public static $data_license = 'ODbL';
@@ -151,6 +153,7 @@ class odok extends modul {
 class voreskunst extends modul {
     protected static $short_name = 'voreskunst'; 
     public static $long_name = 'Vores Kunst - Kulturstyrelsen';
+    public static $plain_name = 'Vores Kunst';     //short but descriptive
     public static $info_link = 'http://vores.kunst.dk/';
     protected static $service_url = 'http://kunstpaastedet.dk/wsd/search/';
     public static $data_license = 'CC-0'; //http://www.kulturstyrelsen.dk/kulturarv/databaser/rettigheder-til-data/
