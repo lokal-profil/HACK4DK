@@ -8,6 +8,13 @@
     overflow: auto;
 }
 
+#searchheader {
+    position: fixed;
+    background-color: #ff842b; 
+    right:2%; 
+    left: 61%
+}
+
 #sidebar {
     padding-left: 1em;
     padding-right: 1em;
@@ -37,9 +44,20 @@
     overflow: auto;
 }
 
-.rcimg {
+
+.rcballoon {
+    max-width: 40%;
+
+}
+
+.rcballoon img {
+    padding-right: .5em;
+    width: 20%;
+    float: left;
+}
+
+.resultcard img {
     padding-right: .5em;
     width: 15%;
-    max-height: 95%;
     float: left;
 }
