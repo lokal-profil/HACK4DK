@@ -57,12 +57,12 @@ function populateSearchResult(rObjs) {
 	}
 	
 	if(ro.media && ro.media.mediatype == 'image') {
-            newCard.append('<img src="' + ro.media.thumb + '" class="rcimg"/>');
+            newCard.append('<img src="' + ro.media.thumb + '"/>');
 	}
 	newCard.append('<b>' + ro.title + '</b><p>' + ro.artist + ' (' + ro.year + ')' );
 	$('#searchresults').append(newCard);
 	
-	$('#rc_' + index).balloon({position: 'left', classname: 'rcballoon', css: {maxWidth: '40%'}, contents: newCard.html() + '<p>' + ro.text.fulltext + '</p>' }); 
+	$('#rc_' + index).balloon({position: 'left', classname: 'rcballoon', css: { minWidth: '400px' }, contents: newCard.html() + '<p>' + ro.text.fulltext + '</p>' }); 
     });
 
     // Adjust map zoom
@@ -143,7 +143,7 @@ window.onload = function load() {
     
     <div class="pure-u-2-5" id="sidebarholder">
       <div id="sidebar">	
-	<div class="pure-form">
+	<div class="pure-form" id="searchheader">
 	  <fieldset>
 	    <legend>Public art search</legend>
 	    <label for="type_artist">
@@ -155,7 +155,7 @@ window.onload = function load() {
 	    <label for="type_place">
 	      <input id="type_place" type="radio" value="place" name="st">&nbsp;Place</input>
 	    </label>
-            <input type="text" id="q" placeholder="Type your query" style="width: 80%"/><br/>
+            <input type="text" id="q" placeholder="Type your query" style="width: 99%"/><br/>
 
 	  </fieldset>
 	</div>
