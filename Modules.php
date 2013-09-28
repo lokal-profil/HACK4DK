@@ -7,14 +7,15 @@ abstract class modul {
     public $data_license;   //license for the data (excluding images)
     protected $short_name;  //The address for the api
     protected $service_url; //The address for the api
-    protected $image_width; //The address for the api
-    public $items;       //array of replied items
+    protected $thumb_width; //The address for the api
+    public $items;          //array of replsponded items
+    public $supported_types;//array of types supported by make_query
     
-    /** Construct the class, giving imagewidth in px */
-    abstract public function __construct($image_width);
+    /** Construct the class, giving thumb_width in px */
+    abstract public function __construct($thumb_width);
 
     /** Construct and return the queryurl for the given type and value
-     *  Returns false if type isn't supported
+     *  Returns NULL if type isn't supported
      */
     abstract public function make_query($type, $value);
     /**
@@ -24,28 +25,30 @@ abstract class modul {
      * place (words)
      ** material        - add in phase 2
      * #Place-coordinates - removed since not all api's support this. Potentially selecting this would shade out incompatible api's
-     * #Modules to include/exclude - not sent down to module elvel
+     * #Modules to include/exclude - not sent down to module level
      */
 
-    /** Process the returned reply and fill internal parameters
-     *  Returns null on success, otherwise an error message
-     */
-    abstract public function process_reply($reply);
-    /**
+    /** 
+     * Process the returned response and fill internal $items array
+     * Returns NULL on success, otherwise an error message
      * parameters formated per https://github.com/lokal-profil/HACK4DK/blob/master/web/mockup/js/stageobject.js
      */
+    abstract public function process_response($response);
 }
 
-
-/* -------------------------------------------------------------------------------- */
+/**
+ * -------------------------------------------------------------------------------- 
+ * Description of dataset
+ */
 class odok extends modul {
-    public function __construct($image_width) {
+    public function __construct($thumb_width) {//these should not be instance properties
         $this->short_name = 'odok'; 
         $this->long_name = 'ODOK - Public art in Sweden';
         $this->info_link = 'http://offentligkonst.se';
         $this->service_url = 'http://wlpa.wikimedia.se/odok-bot/api.php';
         $this->data_license = NULL;
-        $this->image_width = $image_width;
+        $this->thumb_width = $thumb_width;
+        $this->supported_types = array('artist', 'title', 'place');
     }
     
     /** Construct and return the query */
@@ -62,15 +65,15 @@ class odok extends modul {
                 $queryUrl .= '&address=' . urlencode($value); //Should return a warnign that it doesn't search on district/city/municipality/county
                 break;
             default:
-                $queryUrl = False;
+                $queryUrl = NULL;
                 break;  
         }
         return $queryUrl;
     }
     
-    /** Process the returned reply and fill internal parameters */
-    public function process_reply($reply) {
-        $json = json_decode($reply, true);
+    /** Process the returned response and fill internal parameters */
+    public function process_response($response) {
+        $json = json_decode($response, true);
         
         $totalResults = count($json['body']);
         $success = $json['head'];
@@ -88,7 +91,7 @@ class odok extends modul {
                 if ($a['image']){
                     $media = array(
                         "mediatype" => 'image',
-                        "thumb" => 'https://commons.wikimedia.org/w/thumb.php?f=' . $a['image'] . '&width=' . $this->image_width,
+                        "thumb" => 'https://commons.wikimedia.org/w/thumb.php?f=' . $a['image'] . '&width=' . $this->thumb_width,
                         "medialink" => self::getImageFromCommons($a['image']),
                         "medialic" => NULL,
                         "byline" => 'See <a href="https://commons.wikimedia.org/wiki/File:' . $a['image'] .'">the image page on Wikimedia Commons</a>.'
@@ -141,15 +144,19 @@ class odok extends modul {
     }
 }
 
-/* -------------------------------------------------------------------------------- */
+/**
+ * -------------------------------------------------------------------------------- 
+ * Description of dataset
+ */
 class voreskunst extends modul {
-    public function __construct($image_width) {
+    public function __construct($thumb_width) {
         $this->short_name = 'voreskunst'; 
         $this->long_name = 'Vores Kunst - Kulturstyrelsen';
         $this->info_link = 'http://vores.kunst.dk/';
         $this->service_url = 'http://kunstpaastedet.dk/wsd/search/';
         $this->data_license = NULL;
-        $this->image_width = $image_width;
+        $this->thumb_width = $thumb_width;
+        $this->supported_types = array('artist', 'title', 'place');
     }
     
     /** Construct and return the query */
@@ -171,14 +178,14 @@ class voreskunst extends modul {
                 }
                 break;
             default:
-                $queryUrl = False;
+                $queryUrl = NULL;
                 break;  
         }
     }
     
-    /** Process the returned reply and fill internal parameters */
-    public function process_reply($reply) {
-        $json = json_decode($reply, true);
+    /** Process the returned response and fill internal parameters */
+    public function process_response($response) {
+        $json = json_decode($response, true);
         
         reset($json);
         $first_key = key($json);
@@ -221,5 +228,5 @@ class voreskunst extends modul {
         }
         return; //Null
     }
-
 }
+?>
