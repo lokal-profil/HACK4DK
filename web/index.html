@@ -35,6 +35,9 @@ function executeSearch(q, st, m) {
 
 function populateSearchResult(rObjs) {
 
+    var header = rObjs.header;
+    var body = rObjs.body;
+
     // reset markers, bounds and searchresult
     $('#searchresults').html('');
     markers.destroy();
@@ -43,7 +46,7 @@ function populateSearchResult(rObjs) {
     map.addLayer(markers);
 
     // iterate all result objects
-    $.each(rObjs, function(index, ro) {
+    $.each(body, function(index, ro) {
 	var newCard = $(document.createElement('div'));
 	newCard.attr('class', 'resultcard');
 	newCard.attr('id', 'rc_' + index);
@@ -142,8 +145,9 @@ window.onload = function load() {
     </div>
     
     <div class="pure-u-2-5" id="sidebarholder">
-      <div id="sidebar">	
+      <div id="sidebar">
 	<div class="pure-form" id="searchheader">
+	  <div style="position: fixed; right:0; top:0"><a href="#">?</a></div>
 	  <fieldset>
 	    <legend>Public art search</legend>
 	    <label for="type_artist">
