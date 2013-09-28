@@ -5,12 +5,12 @@
     top: 0;
     bottom: 0;
     position: absolute;
+    overflow: auto;
 }
 
 #sidebar {
     padding-left: 1em;
     padding-right: 1em;
-    overflow: auto;
 }
 
 #main {
