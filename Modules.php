@@ -54,7 +54,7 @@ class odok extends modul {
     
     /** Construct and return the query */
     public function make_query($type, $value) {
-        $queryUrl .= self::$service_url . '?action=get&format=json&limit=100';
+        $queryUrl = self::$service_url . '?action=get&format=json&limit=100';
         switch ($type) {
             case 'artist':
                 $queryUrl .= '&artist=' . urlencode($value);
@@ -84,7 +84,6 @@ class odok extends modul {
             if ($success == 0) {
                 return $json['head']['error_number'] . ": " . $json['head']['error_message'];
             }
-            break;
         } else {
             $arr = Array();
             foreach ($json['body'] as $key => $value){
@@ -163,7 +162,7 @@ class voreskunst extends modul {
     
     /** Construct and return the query */
     public function make_query($type, $value) {
-        $queryUrl .= self::$service_url;
+        $queryUrl = self::$service_url;
         switch ($type) {
             case 'artist':
                 $queryUrl .= 'artist/' . urlencode($value);
@@ -196,7 +195,6 @@ class voreskunst extends modul {
         if (!is_array($json[$first_key])) {
             $this->items = Array();
             return $json[$first_key];
-            break;
         } else {
             $arr = Array();
             foreach ($json[$first_key] as $a){
