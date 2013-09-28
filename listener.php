@@ -7,7 +7,7 @@ include('Wrangler.php');
 if(isset($_GET['action'])){
     switch ($_GET['action']) {
         case 'query' :
-            wrangler::make_queries($_GET['st'],$_GET['q'],$_GET['m'][]);
+            wrangler::make_queries($_GET['st'],$_GET['q'],$_GET['m']);
             break;
         case 'allModules' :
             wrangler::get_availableModules();
