@@ -45,18 +45,23 @@ function populateSearchResult(rObjs) {
     var header = rObjs.header;
     var body = rObjs.body;
 
+    console.log(header);
+
     // handle errormsgs
     if(header.error) {
-	$('#feedbackbox').html('<p>' + header.error + '</p>');
+	$('#feedbackbox').html('<p>' + header.error + '</p>')
+	.toggle();
 	$('#feedbackbox').slideDown('slow');
     }
     
     if(header.warning) {
-	$('#feedbackbox').html('<p>' + header.warning + '</p>');
+	$('#feedbackbox').html('<p>' + header.warning + '</p>')
+	.toggle();
 	$('#feedbackbox').slideDown('slow');
     }
     if(header.info) {
-	$('#feedbackbox').html('<p>' + header.info + '</p>');
+	$('#feedbackbox').html('<p>' + header.info + '</p>')
+	.toggle();
 	$('#feedbackbox').slideDown('slow');
     }
 
