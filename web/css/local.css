@@ -25,10 +25,13 @@
 
 /* Feedback box shows messages to the user */
 #feedbackbox {
-    font-color: red;
-    background-color: #808080;
+    color: red;
+    background-color: #ADADAD;
     border: 1px black;
     border-radius: 5px;
+    font-size: .8em;
+    padding: .1em 1.2em;
+    opacity: .75;
 }
 
 /* Div for results of search */

@@ -48,9 +48,9 @@ function populateSearchResult(rObjs) {
     console.log(header);
 
     // handle errormsgs
-    if(header.error) {
+    if(header.error) {	
 	$('#feedbackbox').html('<p>' + header.error + '</p>')
-	.toggle();
+
 	$('#feedbackbox').slideDown('slow');
     }
     
@@ -60,9 +60,9 @@ function populateSearchResult(rObjs) {
 	$('#feedbackbox').slideDown('slow');
     }
     if(header.info) {
-	$('#feedbackbox').html('<p>' + header.info + '</p>')
-	.toggle();
-	$('#feedbackbox').slideDown('slow');
+	console.log(header.info);
+	$('#feedbackbox').html('<p>' + header.info + '</p>').show().delay(5000).fadeOut();
+	
     }
 
     // reset markers, bounds and searchresult
@@ -119,20 +119,20 @@ function populateSearchResult(rObjs) {
 	var bc = $(document.createElement('div'));
 	bc.append(newCard.html());
     
-    if(ro.material) {
-        bc.append('<p>' + ro.material);
-    }
-    if(ro.place) {
-        bc.append('<p>' + ro.place);
-    }
+	if(ro.material) {
+            bc.append('<p>' + ro.material);
+	}
+	if(ro.place) {
+            bc.append('<p>' + ro.place);
+	}
     
 	if(ro.text.fulltext) {
 	    bc.append('<p>' + ro.text.fulltext + '</p>');
-        if(ro.text.byline) {
-            bc.append('<small>' + ro.text.byline + '</small>');
-        }
+            if(ro.text.byline) {
+		bc.append('<small>' + ro.text.byline + '</small>');
+            }
 	}
-    
+	
     if(ro.media && ro.media.mediatype == 'image') {
         bc.append('<p><small></small>Source for image: ' + ro.media.byline + '</small></p>');
     }
@@ -148,7 +148,9 @@ function populateSearchResult(rObjs) {
     });
 
     // Adjust map zoom
-    map.zoomToExtent(markers.getDataExtent());
+    if(body.length > 0) {
+	map.zoomToExtent(markers.getDataExtent());
+    }
 }
 
 function addMarker(lon, lat) {
@@ -280,7 +282,7 @@ window.onload = function load() {
 	      <li class="sb_filter">Choose sources [all unchecked = search all]</li>
 	    </ul>
 	  </fieldset>
-	  <div id="#feedbackbox" style="display:none"/>
+	  <div id="feedbackbox" style="display:none"></div>
 	</div>
 
 	<div id="searchresults">
