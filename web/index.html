@@ -49,15 +49,11 @@ function populateSearchResult(rObjs) {
 
     // handle errormsgs
     if(header.error) {	
-	$('#feedbackbox').html('<p>' + header.error + '</p>')
-
-	$('#feedbackbox').slideDown('slow');
+	$('#feedbackbox').html('<p>' + header.error + '</p>').show().delay(5000).fadeOut();
     }
     
     if(header.warning) {
-	$('#feedbackbox').html('<p>' + header.warning + '</p>')
-	.toggle();
-	$('#feedbackbox').slideDown('slow');
+	$('#feedbackbox').html('<p>' + header.warning + '</p>').show().delay(5000).fadeOut();
     }
     if(header.info) {
 	console.log(header.info);
