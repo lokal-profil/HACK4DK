@@ -45,6 +45,21 @@ function populateSearchResult(rObjs) {
     var header = rObjs.header;
     var body = rObjs.body;
 
+    // handle errormsgs
+    if(header.error) {
+	$('#feedbackbox').html('<p>' + header.error + '</p>');
+	$('#feedbackbox').slideDown('slow');
+    }
+    
+    if(header.warning) {
+	$('#feedbackbox').html('<p>' + header.warning + '</p>');
+	$('#feedbackbox').slideDown('slow');
+    }
+    if(header.info) {
+	$('#feedbackbox').html('<p>' + header.info + '</p>');
+	$('#feedbackbox').slideDown('slow');
+    }
+
     // reset markers, bounds and searchresult
     $('#searchresults').html('');
     markers.destroy();
@@ -67,13 +82,13 @@ function populateSearchResult(rObjs) {
 	}
 	
 	if(ro.media && ro.media.mediatype == 'image') {
-        imgSrc = '<img src="' + ro.media.thumb + '"/>';
-        if(ro.media.medialink) {
-            newCard.append('<a href="' + ro.media.medialink + '" target="_blank">' + imgSrc + '</a>');
-        }
-        else {
-            newCard.append(imgSrc);
-        }
+            imgSrc = '<img src="' + ro.media.thumb + '"/>';
+            if(ro.media.medialink) {
+		newCard.append('<a href="' + ro.media.medialink + '" target="_blank">' + imgSrc + '</a>');
+            }
+            else {
+		newCard.append(imgSrc);
+            }
 	}
 
 	var content = '';
@@ -82,7 +97,7 @@ function populateSearchResult(rObjs) {
 	    content += '<b>' + ro.title + '</b>';
 	}
 	else {
-	    content += '<b>No title in database</b>';
+	    content += '<b>[No title in database]</b>';
 	}
 	if(ro.artist) {
 	    content += '<p>' + ro.artist;
@@ -259,8 +274,8 @@ window.onload = function load() {
 	    <ul class="sb_dropdown" id="modulelist" style="display: none;">
 	      <li class="sb_filter">Choose sources [all unchecked = search all]</li>
 	    </ul>
-
 	  </fieldset>
+	  <div id="#feedbackbox" style="display:none"/>
 	</div>
 
 	<div id="searchresults">

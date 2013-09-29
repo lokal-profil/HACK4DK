@@ -1,3 +1,5 @@
+
+/* Outer div of sidebar */
 #sidebarholder {
     background-color: #ff842b;
     height: 100%;
@@ -8,6 +10,12 @@
     overflow: auto;
 }
 
+#sidebar {
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+/* header part of sidebar, inputbox etc */
 #searchheader {
     position: fixed;
     background-color: #ff842b; 
@@ -15,15 +23,20 @@
     left: 61%
 }
 
+/* Feedback box shows messages to the user */
+#feedbackbox {
+    font-color: red;
+    background-color: #808080;
+    border: 1px black;
+    border-radius: 5px;
+}
+
+/* Div for results of search */
 #searchresults {
     padding-top: 8em;
 }
 
-#sidebar {
-    padding-left: 1em;
-    padding-right: 1em;
-}
-
+/* Main map div */
 #main {
     position: absolute;
     top: 0;
@@ -38,6 +51,7 @@
     position: fixed;
 }
 
+/* class for result cards shown inside #searchresults */
 .resultcard {
     border-radius: 5px;
     border: 1px solid black;
@@ -48,20 +62,22 @@
     overflow: auto;
 }
 
+/* Image size inside the resultcard */
+.resultcard img {
+    padding-right: .5em;
+    width: 15%;
+    float: left;
+}
 
+/* The balloon shown on mouse over a resultcard */
 .rcballoon {
     max-width: 40%;
 
 }
 
+/* Image size inside balloon */
 .rcballoon img {
     padding-right: .5em;
     width: 20%;
-    float: left;
-}
-
-.resultcard img {
-    padding-right: .5em;
-    width: 15%;
     float: left;
 }
