@@ -2,11 +2,11 @@
 
 /* -------------------------------------------------------------------------------- */
 abstract class modul {
+    protected static $short_name; //short parseable name of the datasource
     public static $long_name;      //name of datasource
     public static $plain_name;     //short but descriptive
     public static $info_link;      //url to more information for datasource
     public static $data_license;   //license for the data (excluding images)
-    protected static $short_name;  //The address for the api
     protected static $service_url; //The address for the api
     protected $thumb_width; //The address for the api
     public $items;          //array of replsponded items
