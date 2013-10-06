@@ -12,6 +12,7 @@ class wrangler {
     public static $availableModules = array( //the only place where you need to add new modules
         'odok',
         'voreskunst',
+	'dm',
     );
     public static $thumb_width=100;     //thumb_width in px
     public static $toManyResults=500;   //how many results are to many?
@@ -85,7 +86,7 @@ class wrangler {
     
     //turns reply into json for the js
     private function respond($payload){
-        $json = json_encode($payload);
+      $json = json_encode($payload);
         header('Content-type: text/plain');
         echo $json;
     }
