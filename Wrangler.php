@@ -1,5 +1,5 @@
 <?php
-include('Modules.php');
+require('Modules.php');
 class wrangler {
     /**
      * Api which passes on the js queries to various modules and returns their responses
@@ -9,13 +9,26 @@ class wrangler {
      * get basic info from modules (names, licenses, supported types etc.
      * return json comprising of all search results
      */
-    public static $availableModules = array( //the only place where you need to add new modules
-        'odok',
-        'voreskunst',
-	'dm',
-    );
+    public static $availableModules;    //available modules
     public static $thumb_width=100;     //thumb_width in px
     public static $toManyResults=500;   //how many results are to many?
+    
+    /*
+     * Loads all modules in the /modules/ directory
+     * Done this way since a proper autoloder only loads the files when
+     * the classes are instantiated. Therby not giving us acces to the
+     * static variables
+     */
+    public function loadModules(){
+        if (self::$availableModules == null){
+            $loadedModules = array();
+            foreach (glob("modules/*.php") as $filename) {
+                array_push($loadedModules, substr($filename, strlen('modules/') ,-strlen('.php')));
+                require $filename;
+            }
+            self::$availableModules = $loadedModules;
+        }
+    }
     
     // a list of the available modules including a longer linked name
     public function get_availableModules(){

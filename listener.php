@@ -1,5 +1,7 @@
 <?php
 include('Wrangler.php');
+$wrangler = new wrangler();
+$wrangler::loadModules();
 /**
  * Listener. If action=query
  *  make_queries($type, $value, $includedModules)
@@ -7,13 +9,13 @@ include('Wrangler.php');
 if(isset($_GET['action'])){
     switch ($_GET['action']) {
         case 'query' :
-            wrangler::make_queries($_GET['st'],$_GET['q'],$_GET['m']);
+            $wrangler::make_queries($_GET['st'],$_GET['q'],$_GET['m']);
             break;
         case 'allModules' :
-            wrangler::get_availableModules();
+            $wrangler::get_availableModules();
             break;
         case 'hasType' :
-            wrangler::supports_type($_GET['st']);
+            $wrangler::supports_type($_GET['st']);
             break;
         default:
             echo 'invalid action: ' . $_GET['action'];
@@ -22,13 +24,13 @@ if(isset($_GET['action'])){
 } elseif(isset($_POST['action'])){
     switch ($_POST['action']) {
         case 'query' :
-            wrangler::make_queries($_POST['st'],$_POST['q'],$_POST['m']);
+            $wrangler::make_queries($_POST['st'],$_POST['q'],$_POST['m']);
             break;
         case 'allModules' :
-            wrangler::get_availableModules();
+            $wrangler::get_availableModules();
             break;
         case 'hasType' :
-            wrangler::supports_type($_POST['st']);
+            $wrangler::supports_type($_POST['st']);
             break;
         default:
             echo 'invalid action: ' . $_POST['action'];
