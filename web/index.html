@@ -45,8 +45,6 @@ function populateSearchResult(rObjs) {
     var header = rObjs.header;
     var body = rObjs.body;
 
-    console.log(header);
-
     // handle errormsgs
     if(header.error) {	
 	$('#feedbackbox').html('<p>' + header.error + '</p>').show().delay(5000).fadeOut();
@@ -204,6 +202,7 @@ window.onload = function load() {
 		    boxes.push($(this).val());
 		});
 		executeSearch(document.getElementById('q').value, st, boxes);
+		window.location.hash = boxes.join(',') + '/' + st + '/' + $('#q').val();
 	    }
 	}
     });
@@ -297,7 +296,7 @@ window.onload = function load() {
 	    <label for="type_place">
 	      <input id="type_place" type="radio" value="place" name="st">&nbsp;Place</input>
 	    </label>
-            <input class="sb_input" type="text" id="q" placeholder="Type your query" style="width: 99%"/>
+            <input class="sb_input" type="text" id="q" autocomplete="off" placeholder="Type your query" style="width: 99%"/>
 	  </fieldset>
 	  <ul class="sb_dropdown" id="modulelist" style="display: none;">
 	    <li class="sb_filter">Choose sources [all unchecked = search all]</li>
