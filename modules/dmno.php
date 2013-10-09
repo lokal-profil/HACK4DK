@@ -92,12 +92,31 @@ class dmno extends modul {
                     list($lat, $long) = explode(',', $a['delving_geohash'][0]);
                 }
 
+		// Handle date
+		// First step to remove 'start=' and 'end='
+		// Secondly don't show 'from - to' if they're the same
+		// if date also is first of jan, asume that it's really unknown and only show the year.
+		$year = $a['dcterms_created'][0];
+		if(preg_match('/start\=(\d{4}\-\d{2}\-\d{2})\;end\=(\d{4}\-\d{2}\-\d{2})/', $year, $match)) {
+		  if($match[1] == $match[2]) {
+		    if(preg_match('/(\d{4})\-01\-01$/', $match[1], $yearmatch)) {
+		      $year = $yearmatch[1];
+		    }
+		    else {
+		      $year = $match[1];
+		    }
+		  }
+		  else {
+		    $year = "$match[1] &ndash; $match[2]";
+		  }
+		}
+
                 //Make main object
                 $item = array(
                     "id" => $a['dc_identifier'],
                     "title" => empty($a['delving_title'][0]) ? NULL : $a['delving_title'][0],
                     "artist" => empty($a['delving_creator'][0]) ? NULL : $a['delving_creator'][0], //wikidata?
-                    "year" => empty($a['dcterms_created'][0]) ? NULL : $a['dcterms_created'],
+                    "year" => empty($year) ? NULL : $year,
                     "material" => empty($a['dc_medium'][0]) ? NULL : $a['dc_medium'][0],
                     "place" => empty($place) ? NULL : $place,
                     "geodata" => array(
