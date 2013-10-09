@@ -262,7 +262,7 @@ window.onload = function load() {
     <div class="pure-u-2-5" id="sidebarholder">
       <div id="sidebar">
 	<div class="pure-form" id="searchheader">
-	  <fieldset>
+	  <fieldset style="padding-bottom: 2px;">
 	    <legend>Public art search engine</legend>
 	    <label for="type_artist">
 	      <input id="type_artist" type="radio" value="artist" CHECKED name="st">&nbsp;Artist</input>
@@ -274,10 +274,10 @@ window.onload = function load() {
 	      <input id="type_place" type="radio" value="place" name="st">&nbsp;Place</input>
 	    </label>
             <input class="sb_input" type="text" id="q" placeholder="Type your query" style="width: 99%"/>
-	    <ul class="sb_dropdown" id="modulelist" style="display: none;">
-	      <li class="sb_filter">Choose sources [all unchecked = search all]</li>
-	    </ul>
 	  </fieldset>
+	  <ul class="sb_dropdown" id="modulelist" style="display: none;">
+	    <li class="sb_filter">Choose sources [all unchecked = search all]</li>
+	  </ul>
 	  <div id="feedbackbox" style="display:none"></div>
 	</div>
 
