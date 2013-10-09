@@ -129,20 +129,19 @@ function populateSearchResult(rObjs) {
             }
 	}
 	
-    if(ro.media && ro.media.mediatype == 'image') {
-        bc.append('<p><small></small>Source for image: ' + ro.media.byline + '</small></p>');
-    }
+	if(ro.media && ro.media.mediatype == 'image') {
+            bc.append('<p><small></small>Source for image: ' + ro.media.byline + '</small></p>');
+	}
 
 
-
-	$('#rc_' + index).balloon(
-	    {
-		position: 'left', 
-		classname: 'rcballoon', 
-		css: { minWidth: '400px' }, 
-		contents: bc }); 
+	
+	$('#rc_' + index).balloon({
+	    position: 'left', 
+	    classname: 'rcballoon', 
+	    css: { minWidth: '400px' }, 
+	    contents: bc }); 
     });
-
+    
     // Adjust map zoom
     if(body.length > 0) {
 	map.zoomToExtent(markers.getDataExtent());
@@ -221,6 +220,13 @@ window.onload = function load() {
 	    action: 'allModules'
 	},
 	success: function(json) {
+
+	    var hash = $(location).attr('hash').substr(1);
+	    var hashparts;
+	    if(hash) {
+		hashparts = hash.split('/')[0].split(',');
+	    }
+
 	    $.each(json, function(index, module) {
 		var newLi = $(document.createElement('li'));
 		var newInput = $(document.createElement('input'));
@@ -237,9 +243,27 @@ window.onload = function load() {
 		newLi.append(newLabel);
 
 		$('#modulelist').append(newLi);
+
+		// which sources should we mark?
+		for(var i = 0; i <= hashparts.length; i++) {
+		    if(module.short_name == hashparts[i]) {
+			$('#src_' + module.short_name).prop('checked', true);
+		    }
+		}
 	    });
 	}
     });
+
+    // Handle incoming hash
+    var hash = $(location).attr('hash').substring(1);
+    if(hash) {
+	// module/searchtype/query
+	var hashparts = hash.split("/");
+	$('#type_' + hashparts[1]).prop("checked", true);
+	$('#q').val(hashparts[2]);
+
+    }
+
     console.log('Loaded.');
 
 }
