@@ -11,7 +11,8 @@
 <script>
 var rObjs = new Array();
 var map;
-var markers;
+var markers; // this is actually the layer
+var allMarkers = new Array();
 
 function executeSearch(q, st, m, c) {
     // q = query
@@ -74,6 +75,7 @@ function populateSearchResult(rObjs) {
 	newCard.attr('id', 'rc_' + index);
 	
         $(newCard).mouseenter(function() {
+	    highlightMarker('rc_' + index);
 	    if(ro.geodata && ro.geodata.lon) {
 		zoomToMarker(ro.geodata.lon, ro.geodata.lat, 13);
 	    }
@@ -89,7 +91,7 @@ function populateSearchResult(rObjs) {
 	    });
 	}
 	if(ro.geodata && ro.geodata.lon) {
-            addMarker(ro.geodata.lon, ro.geodata.lat);
+            addMarker('rc_' + index, ro.geodata.lon, ro.geodata.lat);
 	}
 	
 	
@@ -159,14 +161,24 @@ function populateSearchResult(rObjs) {
     }
 }
 
-function addMarker(lon, lat) {
-    console.log("Longitude: " + lon + " Latitude: " + lat);
+function addMarker(id, lon, lat) {
+    console.log("Addded a marker at longitude: " + lon + " latitude: " + lat);
     var ll = new OpenLayers.LonLat(lon, lat);
     ll.transform(new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
                  map.getProjectionObject() // to Spherical Mercator Projection
 		);
     var llmark = new OpenLayers.Marker(ll);
+    llmark.setUrl('icons/orange_poi.png');
+    allMarkers[id] = llmark;
     markers.addMarker(llmark);
+}
+
+function highlightMarker(id) {
+    for(var locid in allMarkers) {
+	allMarkers[locid].setUrl('icons/orange_poi.png');
+    }
+    allMarkers[id].setUrl('icons/green_poi.png');
+
 }
 
 function zoomToMarker(lon, lat, zoomLevel) {
