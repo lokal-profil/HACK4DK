@@ -73,13 +73,25 @@ function populateSearchResult(rObjs) {
 	newCard.attr('class', 'resultcard');
 	newCard.attr('id', 'rc_' + index);
 	
-	if(ro.geodata) {
-            $(newCard).mouseenter(function() {
+        $(newCard).mouseenter(function() {
+	    if(ro.geodata && ro.geodata.lon) {
 		zoomToMarker(ro.geodata.lon, ro.geodata.lat, 13);
-            });
-            addMarker(ro.geodata.lon, ro.geodata.lat);
-	    
+	    }
+	    else {
+		$('#main').removeClass('hascoord')
+		    .addClass('nocoord');
+	    }
+        });
+	if(!ro.geodata || !ro.geodata.lon) {
+	    $(newCard).mouseout(function() {
+		$('#main').removeClass('nocoord')
+		    .addClass('hascoord');
+	    });
 	}
+	if(ro.geodata && ro.geodata.lon) {
+            addMarker(ro.geodata.lon, ro.geodata.lat);
+	}
+	
 	
 	if(ro.media && ro.media.mediatype == 'image') {
             imgSrc = '<img src="' + ro.media.thumb + '"/>';
@@ -108,7 +120,7 @@ function populateSearchResult(rObjs) {
 
 	newCard.append(content);
 
-	console.log(newCard);
+//	console.log(newCard);
 	$('#searchresults').append(newCard);
 	
 	var bc = $(document.createElement('div'));

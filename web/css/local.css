@@ -48,6 +48,18 @@
     bottom: 0;
 }
 
+/* main nocoord-div class */
+.nocoord {
+    zoom: 1;
+    opacity: 0.3;
+    filter: alpha(0.3);
+}
+
+.hascoord {
+    opacity: 1;
+    filter: alpha(1);
+}
+
 /* lowering attribution line */
 #OpenLayers_Control_Attribution_7 {
     bottom: 1.5em;
