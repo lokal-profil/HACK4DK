@@ -6,7 +6,7 @@ class wrangler {
      * Needs to:
      * read parameters from js query
      * perform http post requests
-     * get basic info from modules (names, licenses, supported types etc.
+     * get basic info from modules (names, licenses, supported types etc.)
      * return json comprising of all search results
      */
     public static $availableModules;    //available modules

@@ -1,7 +1,9 @@
 <?php
 /**
  * Base module
- * For implemented modules see the /modules directory
+ * 
+ * All implemented modules must be in the /modules directory and follow
+ * the naming /modules/$class.php
  */
 abstract class modul {
     protected static $short_name;   //short parseable name of the datasource
@@ -17,19 +19,13 @@ abstract class modul {
     /** Construct the class, giving thumb_width in px */
     abstract public function __construct($thumb_width);
 
-    /** Construct and return the queryurl for the given type and value
-     *  Returns NULL if type isn't supported
+    /** 
+     * Construct and return the queryurl for the given type and value
+     * Returns NULL if type isn't supported
+     * Valid type parameters: artist, title, place
+     * Possible future types: material, coordinates...
      */
     abstract public function make_query($type, $value);
-    /**
-     * Valid type parameters:
-     * artist
-     * title
-     * place (words)
-     ** material        - add in phase 2
-     * #Place-coordinates - removed since not all api's support this. Potentially selecting this would shade out incompatible api's
-     * #Modules to include/exclude - not sent down to module level
-     */
 
     /** 
      * Process the returned response and fill internal $items array
