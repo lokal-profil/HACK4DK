@@ -221,7 +221,7 @@ window.onload = function load() {
 	success: function(json) {
 
 	    var hash = $(location).attr('hash').substr(1);
-	    var hashparts;
+	    var hashparts = null;
 	    if(hash) {
 		hashparts = hash.split('/')[0].split(',');
 	    }
@@ -244,9 +244,11 @@ window.onload = function load() {
 		$('#modulelist').append(newLi);
 
 		// which sources should we mark?
-		for(var i = 0; i <= hashparts.length; i++) {
-		    if(module.short_name == hashparts[i]) {
-			$('#src_' + module.short_name).prop('checked', true);
+		if(hashparts != null) {
+		    for(var i = 0; i <= hashparts.length; i++) {
+			if(module.short_name == hashparts[i]) {
+			    $('#src_' + module.short_name).prop('checked', true);
+			}
 		    }
 		}
 	    });
