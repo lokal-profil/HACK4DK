@@ -13,10 +13,11 @@ var rObjs = new Array();
 var map;
 var markers;
 
-function executeSearch(q, st, m) {
+function executeSearch(q, st, m, c) {
     // q = query
     // st = search type
     // m = module
+    // c = only with/without coords
     
     rObjs = new Array();
 
@@ -201,7 +202,7 @@ window.onload = function load() {
 		$('[name=m]:checked').each(function() {
 		    boxes.push($(this).val());
 		});
-		executeSearch(document.getElementById('q').value, st, boxes);
+		executeSearch($('#q').val(), st, boxes, $('#c').val());
 		window.location.hash = boxes.join(',') + '/' + st + '/' + $('#q').val();
 	    }
 	}
@@ -289,6 +290,7 @@ window.onload = function load() {
 	<div class="pure-form" id="searchheader">
 	  <fieldset style="padding-bottom: 2px;">
 	    <legend>Public art search engine</legend>
+	    <input type="hidden" id="c" name="c" value="true"/>
 	    <label for="type_artist">
 	      <input id="type_artist" type="radio" value="artist" CHECKED name="st">&nbsp;Artist</input>
 	    </label>
