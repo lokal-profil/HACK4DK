@@ -23,6 +23,9 @@ class wrangler {
         if (self::$availableModules == null){
             $loadedModules = array();
             foreach (glob("modules/*.php") as $filename) {
+	      if($filename == 'modules/index.php') {
+		continue;
+	      }
                 array_push($loadedModules, substr($filename, strlen('modules/') ,-strlen('.php')));
                 require $filename;
             }
