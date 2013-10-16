@@ -41,6 +41,7 @@ class wrangler {
                 'short_name'=>$moduleName,
                 'plain_name'=>$moduleName::$plain_name,
                 'linked_name'=>'<a href="' . $moduleName::$info_link .'">'. $moduleName::$long_name .'</a>',
+                'supported_types'=>$moduleName::$supported_types
             );
             array_push($available, $a);
         }
