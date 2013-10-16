@@ -8,13 +8,9 @@ class odok extends modul {
     public static $long_name = 'ÖDOK - Public art in Sweden';
     public static $plain_name = 'ÖDOK';     //short but descriptive
     public static $info_link = 'http://offentligkonst.se';
-    protected static $service_url = 'http://wlpa.wikimedia.se/odok-bot/api.php';
     public static $data_license = 'ODbL';
     public static $supported_types = array('artist', 'title', 'place');
-    
-    public function __construct($thumb_width) {//these should not be instance properties
-        $this->thumb_width = $thumb_width;
-    }
+    protected static $service_url = 'http://wlpa.wikimedia.se/odok-bot/api.php';
     
     /** Construct and return the query */
     public function make_query($type, $value) {

@@ -8,13 +8,9 @@ class voreskunst extends modul {
     public static $long_name = 'Vores Kunst - Kulturstyrelsen';
     public static $plain_name = 'Vores Kunst';     //short but descriptive
     public static $info_link = 'http://vores.kunst.dk/';
-    protected static $service_url = 'http://kunstpaastedet.dk/wsd/search/';
     public static $data_license = 'CC-0'; //http://www.kulturstyrelsen.dk/kulturarv/databaser/rettigheder-til-data/
     public static $supported_types = array('artist', 'title', 'place');
-    
-    public function __construct($thumb_width) {
-        $this->thumb_width = $thumb_width;
-    }
+    protected static $service_url = 'http://kunstpaastedet.dk/wsd/search/';
     
     /** Construct and return the query */
     public function make_query($type, $value) {

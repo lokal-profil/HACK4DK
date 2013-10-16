@@ -8,13 +8,9 @@ class dmno extends modul {
     public static $long_name = 'Digitalt museum';
     public static $plain_name = 'Digitalt museum';     //short but descriptive
     public static $info_link = 'http://digitaltmuseum.no';
-    protected static $service_url = 'http://kulturnett2.delving.org/organizations/kulturnett/api/search';
     public static $data_license = '';
     public static $supported_types = array('artist', 'title');
-    
-    public function __construct($thumb_width) {//these should not be instance properties
-        $this->thumb_width = $thumb_width;
-    }
+    protected static $service_url = 'http://kulturnett2.delving.org/organizations/kulturnett/api/search';
     
     /** Construct and return the query */
     public function make_query($type, $value) {
@@ -92,24 +88,24 @@ class dmno extends modul {
                     list($lat, $long) = explode(',', $a['delving_geohash'][0]);
                 }
 
-		// Handle date
-		// First step to remove 'start=' and 'end='
-		// Secondly don't show 'from - to' if they're the same
-		// if date also is first of jan, asume that it's really unknown and only show the year.
-		$year = $a['dcterms_created'][0];
-		if(preg_match('/start\=(\d{4}\-\d{2}\-\d{2})\;end\=(\d{4}\-\d{2}\-\d{2})/', $year, $match)) {
-		  if($match[1] == $match[2]) {
-		    if(preg_match('/(\d{4})\-01\-01$/', $match[1], $yearmatch)) {
-		      $year = $yearmatch[1];
-		    }
-		    else {
-		      $year = $match[1];
-		    }
-		  }
-		  else {
-		    $year = "$match[1] &ndash; $match[2]";
-		  }
-		}
+                // Handle date
+                // First step to remove 'start=' and 'end='
+                // Secondly don't show 'from - to' if they're the same
+                // if date also is first of jan, asume that it's really unknown and only show the year.
+                $year = $a['dcterms_created'][0];
+                if(preg_match('/start\=(\d{4}\-\d{2}\-\d{2})\;end\=(\d{4}\-\d{2}\-\d{2})/', $year, $match)) {
+                    if($match[1] == $match[2]) {
+                        if(preg_match('/(\d{4})\-01\-01$/', $match[1], $yearmatch)) {
+                            $year = $yearmatch[1];
+                        }
+                        else {
+                            $year = $match[1];
+                        }
+                    }
+                    else {
+                        $year = "$match[1] &ndash; $match[2]";
+                    }
+                }
 
                 //Make main object
                 $item = array(

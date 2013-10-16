@@ -11,13 +11,15 @@ abstract class modul {
     public static $plain_name;      //short but descriptive
     public static $info_link;       //url to more information for datasource
     public static $data_license;    //license for the data (excluding images)
+    public static $supported_types; //array of types supported by make_query
     protected static $service_url;  //The address for the api
     protected $thumb_width;         //The width of the requested thumbnail (if requested)
     public $items;                  //array of response items
-    public static $supported_types; //array of types supported by make_query
     
-    /** Construct the class, giving thumb_width in px */
-    abstract public function __construct($thumb_width);
+    /** Construct the class, giving any instance properties */
+    public function __construct($thumb_width) {
+        $this->thumb_width = $thumb_width;
+    }
 
     /** 
      * Construct and return the queryurl for the given type and value
