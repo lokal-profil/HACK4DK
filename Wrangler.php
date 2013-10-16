@@ -59,13 +59,14 @@ class wrangler {
     }
     
     //given type, value and modules to be included this collects all responses
-    public function make_queries($type, $value, $includedModules){
+    public function make_queries($type, $value, $includedModules, $requireCoords){
         $includedModules = is_null($includedModules) ? self::$availableModules : $includedModules;
+        $requireCoords = is_null($requireCoords) ? true : self::string_to_bool($requireCoords);
         $info=Null; $warning=Null; $error=Null;
         $results = array();
         foreach (self::$availableModules as $moduleName){
             if (in_array($moduleName, $includedModules)){
-                $mod = new $moduleName(self::$thumb_width);
+                $mod = new $moduleName(self::$thumb_width, $requireCoords);
                 $queryUrl = $mod->make_query($type, $value);
                 $response = self::make_httpRequest($queryUrl);
                 if(empty($response)){
@@ -98,6 +99,17 @@ class wrangler {
             "body" =>$results
         );
         self::respond($payload);
+    }
+    
+    //converts a string to a boolean. An unrecognised string is given the $defualt value
+    public function string_to_bool($string, $default=true){
+        if ($string === 'true'){
+            return true;
+        }elseif ($string === 'false'){
+            return false;
+        }else{
+            return $default;
+        }
     }
     
     //turns reply into json for the js

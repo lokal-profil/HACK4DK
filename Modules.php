@@ -14,11 +14,13 @@ abstract class modul {
     public static $supported_types; //array of types supported by make_query
     protected static $service_url;  //The address for the api
     protected $thumb_width;         //The width of the requested thumbnail (if requested)
+    protected $requireCoords;       //Whether only results with coordinates should be requested/returned
     public $items;                  //array of response items
     
     /** Construct the class, giving any instance properties */
-    public function __construct($thumb_width) {
+    public function __construct($thumb_width, $requireCoords) {
         $this->thumb_width = $thumb_width;
+        $this->requireCoords = $requireCoords;
     }
 
     /** 

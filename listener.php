@@ -9,7 +9,7 @@ $wrangler::loadModules();
 if(isset($_GET['action'])){
     switch ($_GET['action']) {
         case 'query' :
-            $wrangler::make_queries($_GET['st'],$_GET['q'],$_GET['m']);
+            $wrangler::make_queries($_GET['st'],$_GET['q'],$_GET['m'],$_GET['c']);
             break;
         case 'allModules' :
             $wrangler::get_availableModules();
@@ -24,7 +24,7 @@ if(isset($_GET['action'])){
 } elseif(isset($_POST['action'])){
     switch ($_POST['action']) {
         case 'query' :
-            $wrangler::make_queries($_POST['st'],$_POST['q'],$_POST['m']);
+            $wrangler::make_queries($_POST['st'],$_POST['q'],$_POST['m'],$_POST['c']);
             break;
         case 'allModules' :
             $wrangler::get_availableModules();
