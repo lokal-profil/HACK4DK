@@ -60,6 +60,14 @@ class voreskunst extends modul {
                 } elseif (!empty($a['location name'])){
                     $place .= $a['location name'];
                 }
+                //make geodata separately
+                $geodata = NULL;
+                if (!empty($a['latitude'])){
+                    $geodata = array(
+                        "lat" => $a['latitude'],
+                        "lon" => $a['longitude'],
+                    );
+                }
                 //Make main object
                 $item = array(
                     "id" => $a['object_id'],
@@ -68,10 +76,7 @@ class voreskunst extends modul {
                     "year" => empty($a['date']) ? NULL : $a['date'],
                     "material" => NULL,
                     "place" => empty($place) ? NULL : $place,
-                    "geodata" => array(
-                        "lat" => $a['latitude'],
-                        "lon" => $a['longitude'],
-                    ),
+                    "geodata" => $geodata,
                     "media" => array(
                         "mediatype" => 'none' //As $a['primary_image'] points to a dispatcher
                         //"medialic" => 'CC BY-NC-ND 2.5 DK'
@@ -87,7 +92,8 @@ class voreskunst extends modul {
                         "byline"  => '<a href="' . self::$info_link . '">' . self::$long_name . '</a> /' . self::$data_license
                     )
                 );
-                array_push($arr, $item);
+                if (!empty($item['geodata']) or !$this->requireCoords)
+                    array_push($arr, $item);
             }
             $this->items = $arr;
         }

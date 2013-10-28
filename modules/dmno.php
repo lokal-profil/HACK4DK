@@ -106,7 +106,14 @@ class dmno extends modul {
                         $year = "$match[1] &ndash; $match[2]";
                     }
                 }
-
+                //make geodata separately
+                $geodata = NULL;
+                if (!empty($lat)){
+                    $geodata = array(
+                        "lat" => $lat,
+                        "lon" => $long,
+                    );
+                }
                 //Make main object
                 $item = array(
                     "id" => $a['dc_identifier'],
@@ -115,10 +122,7 @@ class dmno extends modul {
                     "year" => empty($year) ? NULL : $year,
                     "material" => empty($a['dc_medium'][0]) ? NULL : $a['dc_medium'][0],
                     "place" => empty($place) ? NULL : $place,
-                    "geodata" => array(
-                        "lat" => $lat,
-                        "lon" => $long,
-                    ),
+                    "geodata" => $geodata,
                     "media" => $media,
                     "text" => array(
                         "fulltext" => empty($a['delving_description'][0]) ? NULL : $a['delving_description'][0],
@@ -131,7 +135,8 @@ class dmno extends modul {
                         "byline"  => '<a href="' . self::$info_link . '">' . self::$long_name . '</a> /' . self::$data_license
                     )
                 );
-                array_push($arr, $item);
+                if (!empty($item['geodata']) or !$this->requireCoords)
+                    array_push($arr, $item);
             }
             $this->items = $arr;
         }

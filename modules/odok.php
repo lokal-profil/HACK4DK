@@ -71,6 +71,14 @@ class odok extends modul {
                 } elseif (!empty($a['district'])){
                     $place .= $a['district'];
                 }
+                //make geodata separately
+                $geodata = NULL;
+                if (!empty($a['lat'])){
+                    $geodata = array(
+                        "lat" => $a['lat'],
+                        "lon" => $a['lon'],
+                    );
+                }
                 //Make main object
                 $item = array(
                     "id" => $a['id'],
@@ -79,10 +87,7 @@ class odok extends modul {
                     "year" => empty($a['year']) ? NULL : $a['year'],
                     "material" => empty($a['material']) ? NULL : $a['material'],
                     "place" => empty($place) ? NULL : $place,
-                    "geodata" => array(
-                        "lat" => $a['lat'],
-                        "lon" => $a['lon'],
-                    ),
+                    "geodata" => $geodata,
                     "media" => $media,
                     "text" => array(
                         "fulltext" => empty($a['descr']) ? NULL : $a['descr'],
@@ -95,7 +100,8 @@ class odok extends modul {
                         "byline"  => '<a href="' . self::$info_link . '">' . self::$long_name . '</a> /' . self::$data_license
                     )
                 );
-                array_push($arr, $item);
+                if (!empty($item['geodata']) or !$this->requireCoords)
+                    array_push($arr, $item);
             }
             $this->items = $arr;
         }
