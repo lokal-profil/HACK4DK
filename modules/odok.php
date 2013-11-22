@@ -10,7 +10,7 @@ class odok extends modul {
     public static $info_link = 'http://offentligkonst.se';
     public static $data_license = 'ODbL';
     public static $supported_types = array('artist', 'title', 'place');
-    protected static $service_url = 'http://wlpa.wikimedia.se/odok-bot/api.php';
+    protected static $service_url = 'http://offentligkonst.se/api/api.php';
     
     /** Construct and return the query */
     public function make_query($type, $value) {
