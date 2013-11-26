@@ -15,6 +15,7 @@ var rObjs = new Array();
 var map;
 var markers; // this is actually the layer
 var allMarkers = new Array();
+var moduleSupport = new Array();
 
 function executeSearch(q, st, m, c) {
     // q = query
@@ -124,7 +125,6 @@ function populateSearchResult(rObjs) {
 
 	newCard.append(content);
 
-//	console.log(newCard);
 	$('#searchresults').append(newCard);
 	
 	var bc = $(document.createElement('div'));
@@ -215,6 +215,19 @@ window.onload = function load() {
     map.setCenter (centerLonLat, 13);
     markers = new OpenLayers.Layer.Markers("Markers");
     map.addLayer(markers);
+
+    // Decide what engines are available
+    $('[name=st]').on('click', function() {
+	for(var module in moduleSupport) {
+	    if($.inArray($(this).val(), moduleSupport[module]) >= 0) {
+		$('#src_' + module).removeAttr('disabled');
+	    }
+	    else {
+		$('#src_' + module).attr('disabled', true);
+	    }
+	}
+    });
+
     
     // Catch enters
 
@@ -279,6 +292,8 @@ window.onload = function load() {
 			}
 		    }
 		}
+
+		moduleSupport[module.short_name] = module.supported_types;
 	    });
 	}
     });
@@ -292,6 +307,8 @@ window.onload = function load() {
 	$('#q').val(hashparts[2]);
 
     }
+
+    $('[name=st]:checked').trigger('click');
 
     console.log('Loaded.');
 
