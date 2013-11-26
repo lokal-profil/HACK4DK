@@ -289,10 +289,10 @@ window.onload = function load() {
 
 		$('#modulelist').append(newLi);
 
-		// which sources should we mark?
+		// Should we check this source?
 		if(hashparts != null) {
 		    for(var i = 0; i <= hashparts.length; i++) {
-			if(module.short_name == hashparts[i]) {
+			if(module.short_name == hashparts[i] && $.inArray($('[name=st]:checked').val(), module.supported_types) >= 0) {
 			    $('#src_' + module.short_name).prop('checked', true);
 			}
 		    }
