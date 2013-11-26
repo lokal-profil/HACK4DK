@@ -77,7 +77,7 @@ function populateSearchResult(rObjs) {
 	newCard.attr('id', 'rc_' + index);
 	
         $(newCard).mouseenter(function() {
-	    //highlightMarker('rc_' + index);
+	    highlightMarker('rc_' + index);
 	    if(ro.geodata && ro.geodata.lon) {
 		zoomToMarker(ro.geodata.lon, ro.geodata.lat, 13);
 	    }
@@ -170,7 +170,8 @@ function addMarker(id, lon, lat) {
                  map.getProjectionObject() // to Spherical Mercator Projection
 		);
     var llmark = new OpenLayers.Marker(ll);
-    //llmark.setUrl('icons/orange_poi.png');
+    llmark.setUrl('icons/orange_poi.png');
+    llmark.display(true);
     allMarkers[id] = llmark;
     markers.addMarker(llmark);
 }
