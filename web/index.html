@@ -171,6 +171,7 @@ function addMarker(id, lon, lat) {
 		);
     var llmark = new OpenLayers.Marker(ll);
     llmark.setUrl('icons/orange_poi.png');
+    llmark.display(true);
     allMarkers[id] = llmark;
     markers.addMarker(llmark);
 }
