@@ -14,7 +14,7 @@ class odok extends modul {
     
     /** Construct and return the query */
     public function make_query($type, $value) {
-        $queryUrl = self::$service_url . '?action=get&format=json&limit=100';
+        $queryUrl = self::$service_url . '?action=get&format=json&json=compact&limit=100';
         $queryUrl .= ($this->requireCoords) ? '&has_coords=true' : '';
         switch ($type) {
             case 'artist':
