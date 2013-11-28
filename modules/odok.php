@@ -5,8 +5,8 @@
  */
 class odok extends modul {
     protected static $short_name = 'odok'; 
-    public static $long_name = 'ÖDOK - Public art in Sweden';
-    public static $plain_name = 'ÖDOK';     //short but descriptive
+    public static $long_name = 'Offentligkonst.se - Public art in Sweden';
+    public static $plain_name = 'Offentligkonst.se';     //short but descriptive
     public static $info_link = 'http://offentligkonst.se';
     public static $data_license = 'ODbL';
     public static $supported_types = array('artist', 'title', 'place');
@@ -44,6 +44,8 @@ class odok extends modul {
             $success = $json['head']['status'];
             if ($success == 0) {
                 return $json['head']['error_number'] . ": " . $json['head']['error_message'];
+            }else{ //success but no body means no hits
+                return 'No objects found.';
             }
         } else {
             $arr = Array();
