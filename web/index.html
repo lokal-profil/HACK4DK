@@ -80,7 +80,7 @@ function populateSearchResult(rObjs) {
         $(newCard).mouseenter(function() {
 	    highlightMarker('rc_' + index);
 	    if(ro.geodata && ro.geodata.lon) {
-		zoomToMarker(ro.geodata.lon, ro.geodata.lat, 13);
+		zoomToMarker(ro.geodata.lon, ro.geodata.lat, map.getZoom());
 	    }
 	    else {
 		$('#main').removeClass('hascoord')
